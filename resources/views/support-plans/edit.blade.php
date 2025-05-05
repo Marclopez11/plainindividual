@@ -265,8 +265,8 @@
                                                         <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
-                                                </div>
+                                </div>
+                            </div>
                                                 <label>Avaluació de l'alumne/a d'origen estranger que ja no assisteix a l'aula d'acollida però que rep suport a l'aula ordinària.</label>
                                             </div>
 
@@ -279,10 +279,10 @@
                                                         <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
-                                                </div>
+                                </div>
+                            </div>
                                                 <label>Avaluació de l'alumne/a d'origen estranger amb necessitats educatives derivades de la incorporació tardana al sistema educatiu.</label>
-                                            </div>
+                        </div>
 
                                             <div class="flex items-start">
                                                 <div class="relative flex items-center mt-1 mr-2">
@@ -301,7 +301,7 @@
                                                 <label class="ml-1">motivada per</label>
                                                 <input type="text" name="commission_motivation" class="ml-1 px-2 py-1 border border-gray-300 rounded-md w-1/3"
                                                     value="{{ old('commission_motivation', $supportPlan->commission_motivation ?? '') }}">
-                                            </div>
+                        </div>
 
                                             <div class="flex items-start">
                                                 <div class="relative flex items-center mt-1 mr-2">
@@ -312,14 +312,14 @@
                                                         <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
-                                                </div>
+                                </div>
+                            </div>
                                                 <label>Altres:</label>
                                                 <input type="text" name="justification_other" class="ml-2 px-2 py-1 border border-gray-300 rounded-md w-4/5"
                                                     value="{{ old('justification_other', $supportPlan->justification_other ?? '') }}">
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                        </div>
                                 </td>
                             </tr>
                             <tr>
@@ -662,7 +662,7 @@
                                                 </div>
                                             </div>
                                             <span>Beques/Ajuts:</span>
-                                        </div>
+                            </div>
 
                                         <div class="flex items-start">
                                             <div class="relative flex items-center mt-1 mr-2">
@@ -673,23 +673,82 @@
                                                     <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                     </svg>
-                                                </div>
-                                            </div>
+                                </div>
+                            </div>
                                             <span>Altres serveis:</span>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
                                 </td>
                             </tr>
                         </table>
+
+                        <!-- HORARI ESCOLAR -->
+                        <div class="rounded-lg border border-gray-300 shadow-sm mb-8 p-4">
+                            <h3 class="text-lg font-semibold mb-4">{{ __('Horari Escolar') }}</h3>
+
+                            @php
+                                $timetable = $supportPlan->timetables()->with('slots')->first();
+                                $timetableData = null;
+
+                                if ($timetable) {
+                                    // Convert timetable data to the format expected by the editor
+                                    $timeSlots = [];
+                                    $slots = [];
+
+                                    // Group slots by time
+                                    $timeMap = [];
+                                    foreach ($timetable->slots as $slot) {
+                                        $timeKey = $slot->time_start . '-' . $slot->time_end;
+                                        if (!isset($timeMap[$timeKey])) {
+                                            $timeMap[$timeKey] = count($timeSlots);
+                                            $timeSlots[] = [
+                                                'start' => $slot->time_start,
+                                                'end' => $slot->time_end
+                                            ];
+                                        }
+
+                                        $timeIndex = $timeMap[$timeKey];
+                                        $slots[] = [
+                                            'day' => $slot->day,
+                                            'timeIndex' => $timeIndex,
+                                            'subject' => $slot->subject,
+                                            'type' => $slot->type ?: 'regular',
+                                            'notes' => $slot->notes ?: ''
+                                        ];
+                                    }
+
+                                    $formattedSlots = $timetable->slots->map(function($slot) {
+                                        return [
+                                            'day' => $slot->day,
+                                            'time_start' => $slot->time_start,
+                                            'time_end' => $slot->time_end,
+                                            'subject' => $slot->subject,
+                                            'type' => $slot->type ?: 'regular',
+                                            'notes' => $slot->notes ?: ''
+                                        ];
+                                    })->toArray();
+
+                                    $timetableData = [
+                                        'name' => $timetable->name,
+                                        'timeSlots' => $timeSlots,
+                                        'slots' => $slots,
+                                        'formattedSlots' => $formattedSlots
+                                    ];
+
+                                    // Convert to JSON for the hidden input
+                                    $timetableDataJson = json_encode($timetableData);
+                                }
+                            @endphp
+
+                            <!-- Hidden input to store the timetable data -->
+                            <input type="hidden" name="timetable_data" value="{{ $timetableDataJson ?? '' }}">
+                            <input type="hidden" name="timetable_name" value="{{ $timetable->name ?? 'Horari Escolar' }}">
+
+                            @include('components.timetable-editor')
                         </div>
 
-                    <!-- Excel Format (Hidden by default) -->
-                    <div id="excel-format-content" class="hidden">
-                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-8" role="alert">
-                            <p class="font-bold">Format Excel</p>
-                            <p>Els camps per al format Excel estaran disponibles pròximament.</p>
-                            </div>
-                        </div>
+                        <!--OBJECTIUS I CRITERIS D'AVALUACIÓ TRANSVERSALS-->
+                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
 
                     <div class="flex justify-end mt-4 space-x-3">
                         <a href="{{ route('support-plans.show', $supportPlan->id) }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition">

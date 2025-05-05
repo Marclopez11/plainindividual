@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupportPlanController;
+use App\Http\Controllers\TimetableController;
 
 // Redirect root to support plans index
 Route::get('/', function () {
@@ -10,14 +11,26 @@ Route::get('/', function () {
 
 // Support Plan resource routes - Add auth middleware to all support plan routes
 Route::middleware(['auth'])->group(function () {
-Route::resource('support-plans', SupportPlanController::class);
+    Route::resource('support-plans', SupportPlanController::class);
 
-// Export routes
-Route::get('support-plans/{id}/export-excel', [SupportPlanController::class, 'exportToExcel'])
-    ->name('support-plans.exportToExcel');
+    // Export routes
+    Route::get('support-plans/{id}/export-excel', [SupportPlanController::class, 'exportToExcel'])
+        ->name('support-plans.exportToExcel');
 
-Route::get('support-plans/{id}/export-word', [SupportPlanController::class, 'exportToWord'])
-    ->name('support-plans.exportToWord');
+    Route::get('support-plans/{id}/export-word', [SupportPlanController::class, 'exportToWord'])
+        ->name('support-plans.exportToWord');
+
+    // Timetable routes
+    Route::get('support-plans/{supportPlan}/timetables', [TimetableController::class, 'index'])
+        ->name('timetables.index');
+    Route::post('support-plans/{supportPlan}/timetables', [TimetableController::class, 'store'])
+        ->name('timetables.store');
+    Route::get('timetables/{timetable}', [TimetableController::class, 'show'])
+        ->name('timetables.show');
+    Route::put('timetables/{timetable}', [TimetableController::class, 'update'])
+        ->name('timetables.update');
+    Route::delete('timetables/{timetable}', [TimetableController::class, 'destroy'])
+        ->name('timetables.destroy');
 });
 
 Route::middleware([

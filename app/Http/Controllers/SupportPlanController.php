@@ -123,6 +123,8 @@ class SupportPlanController extends Controller
             'saber' => 'nullable|array',
             'team_id' => 'nullable|exists:teams,id',
             'professionals' => 'nullable|array',
+            'timetable_data' => 'nullable|string',
+            'timetable_name' => 'nullable|string|max:255',
         ]);
 
         $user = Auth::user();
@@ -139,6 +141,34 @@ class SupportPlanController extends Controller
         $validated['user_id'] = $user->id;
 
         $supportPlan = SupportPlan::create($validated);
+
+        // Handle timetable data if present
+        if (!empty($request->timetable_data)) {
+            $timetableData = json_decode($request->timetable_data, true);
+
+            if ($timetableData && isset($timetableData['formattedSlots'])) {
+                // Create timetable
+                $timetable = $supportPlan->timetables()->create([
+                    'name' => $request->timetable_name ?? 'Horari Escolar',
+                    'configuration' => [
+                        'timeSlots' => $timetableData['timeSlots'] ?? [],
+                        'slots' => $timetableData['slots'] ?? []
+                    ]
+                ]);
+
+                // Create slots
+                foreach ($timetableData['formattedSlots'] as $slotData) {
+                    $timetable->slots()->create([
+                        'day' => $slotData['day'],
+                        'time_start' => $slotData['time_start'],
+                        'time_end' => $slotData['time_end'],
+                        'subject' => $slotData['subject'],
+                        'type' => $slotData['type'] ?? 'regular',
+                        'notes' => $slotData['notes'] ?? null
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('support-plans.show', $supportPlan->id)
             ->with('success', 'Plan de soporte creado correctamente.');
@@ -237,6 +267,8 @@ class SupportPlanController extends Controller
             'saber' => 'nullable|array',
             'team_id' => 'nullable|exists:teams,id',
             'professionals' => 'nullable|array',
+            'timetable_data' => 'nullable|string',
+            'timetable_name' => 'nullable|string|max:255',
         ]);
 
         $user = Auth::user();
@@ -250,6 +282,50 @@ class SupportPlanController extends Controller
         }
 
         $supportPlan->update($validated);
+
+        // Handle timetable data if present
+        if (!empty($request->timetable_data)) {
+            $timetableData = json_decode($request->timetable_data, true);
+
+            if ($timetableData && isset($timetableData['formattedSlots'])) {
+                // Get existing timetable or create a new one
+                $timetable = $supportPlan->timetables()->first();
+
+                if (!$timetable) {
+                    $timetable = $supportPlan->timetables()->create([
+                        'name' => $request->timetable_name ?? 'Horari Escolar',
+                        'configuration' => [
+                            'timeSlots' => $timetableData['timeSlots'] ?? [],
+                            'slots' => $timetableData['slots'] ?? []
+                        ]
+                    ]);
+                } else {
+                    // Update existing timetable
+                    $timetable->update([
+                        'name' => $request->timetable_name ?? 'Horari Escolar',
+                        'configuration' => [
+                            'timeSlots' => $timetableData['timeSlots'] ?? [],
+                            'slots' => $timetableData['slots'] ?? []
+                        ]
+                    ]);
+
+                    // Delete existing slots
+                    $timetable->slots()->delete();
+                }
+
+                // Create slots
+                foreach ($timetableData['formattedSlots'] as $slotData) {
+                    $timetable->slots()->create([
+                        'day' => $slotData['day'],
+                        'time_start' => $slotData['time_start'],
+                        'time_end' => $slotData['time_end'],
+                        'subject' => $slotData['subject'],
+                        'type' => $slotData['type'] ?? 'regular',
+                        'notes' => $slotData['notes'] ?? null
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('support-plans.show', $supportPlan->id)
             ->with('success', 'Plan de soporte actualizado correctamente.');
@@ -432,6 +508,13 @@ class SupportPlanController extends Controller
         // Procesar arrays transversales
         $variables = array_merge($variables, $this->prepareTransversalVariables($supportPlan));
         $variables = array_merge($variables, $this->prepareLearningVariables($supportPlan));
+
+        // Añadir tabla del horario si existe
+        if ($supportPlan->timetables->count() > 0) {
+            $variables['tabla_horario'] = $this->generateTimetableXml($supportPlan->timetables->first());
+        } else {
+            $variables['tabla_horario'] = '<w:p><w:r><w:t>No hi ha cap horari definit.</w:t></w:r></w:p>';
+        }
 
         return $variables;
     }
@@ -663,5 +746,187 @@ class SupportPlanController extends Controller
         }
 
         return $matchingFiles;
+    }
+
+    /**
+     * Genera el XML para la tabla de horario en formato Word
+     */
+    private function generateTimetableXml($timetable)
+    {
+        if (!$timetable) {
+            return '<w:p><w:r><w:t>No hi ha cap horari definit.</w:t></w:r></w:p>';
+        }
+
+        // Iniciar XML de la tabla
+        $xml = '<w:tbl>';
+
+        // Propiedades de tabla
+        $xml .= '<w:tblPr>
+                <w:tblStyle w:val="TableGrid"/>
+                <w:tblW w:w="0" w:type="auto"/>
+                <w:tblBorders>
+                    <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:insideH w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:insideV w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                </w:tblBorders>
+                <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
+            </w:tblPr>';
+
+        // Definir grid para 6 columnas
+        $xml .= '<w:tblGrid>
+                <w:gridCol w:w="1200"/>
+                <w:gridCol w:w="1800"/>
+                <w:gridCol w:w="1800"/>
+                <w:gridCol w:w="1800"/>
+                <w:gridCol w:w="1800"/>
+                <w:gridCol w:w="1800"/>
+            </w:tblGrid>';
+
+        // Encabezado
+        $xml .= '<w:tr>
+                <w:tc>
+                    <w:tcPr>
+                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
+                    </w:tcPr>
+                    <w:p><w:r><w:t></w:t></w:r></w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
+                    </w:tcPr>
+                    <w:p><w:r><w:b/><w:t>DILLUNS</w:t></w:r></w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
+                    </w:tcPr>
+                    <w:p><w:r><w:b/><w:t>DIMARTS</w:t></w:r></w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
+                    </w:tcPr>
+                    <w:p><w:r><w:b/><w:t>DIMECRES</w:t></w:r></w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
+                    </w:tcPr>
+                    <w:p><w:r><w:b/><w:t>DIJOUS</w:t></w:r></w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
+                    </w:tcPr>
+                    <w:p><w:r><w:b/><w:t>DIVENDRES</w:t></w:r></w:p>
+                </w:tc>
+            </w:tr>';
+
+        // Organizar las franjas horarias
+        $timeSlots = [];
+        foreach ($timetable->slots as $slot) {
+            $timeKey = $slot->time_start . '-' . $slot->time_end;
+            if (!isset($timeSlots[$timeKey])) {
+                $timeSlots[$timeKey] = [
+                    'start' => $slot->time_start,
+                    'end' => $slot->time_end,
+                    'slots' => []
+                ];
+            }
+            $timeSlots[$timeKey]['slots'][$slot->day] = $slot;
+        }
+
+        // Ordenar por hora de inicio
+        uksort($timeSlots, function($a, $b) use ($timeSlots) {
+            return strtotime($timeSlots[$a]['start']) - strtotime($timeSlots[$b]['start']);
+        });
+
+        $days = ['DILLUNS', 'DIMARTS', 'DIMECRES', 'DIJOUS', 'DIVENDRES'];
+
+        // Añadir filas para cada franja horaria
+        foreach ($timeSlots as $timeKey => $timeData) {
+            $xml .= '<w:tr>';
+
+            // Columna de horario
+            $xml .= '<w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1200" w:type="dxa"/>
+                    </w:tcPr>
+                    <w:p>
+                        <w:r><w:t>' . htmlspecialchars($timeData['start'], ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                        <w:r><w:br/></w:r>
+                        <w:r><w:t>' . htmlspecialchars($timeData['end'], ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>';
+
+            // Columnas para cada día
+            foreach ($days as $day) {
+                $slot = $timeData['slots'][$day] ?? null;
+                $bgColor = 'FFFFFF'; // Blanco por defecto
+
+                if ($slot) {
+                    // Colores según tipo
+                    switch ($slot->type) {
+                        case 'codocencia':
+                            $bgColor = 'E6D0F0'; // Morado claro (bg-purple-200)
+                            break;
+                        case 'desdoblament':
+                            $bgColor = 'FEF3C7'; // Amarillo claro (bg-yellow-200)
+                            break;
+                        case 'desdoblament_codocencia':
+                            $bgColor = 'FDECDC'; // Naranja claro (bg-orange-200)
+                            break;
+                        case 'pati':
+                            $bgColor = 'DBEAFE'; // Azul claro (bg-blue-100)
+                            break;
+                    }
+                }
+
+                $xml .= '<w:tc>
+                        <w:tcPr>
+                            <w:tcW w:w="1800" w:type="dxa"/>
+                            <w:shd w:val="clear" w:color="auto" w:fill="' . $bgColor . '"/>
+                        </w:tcPr>';
+
+                if ($slot) {
+                    $xml .= '<w:p>
+                            <w:r><w:b/><w:t>' . htmlspecialchars($slot->subject, ENT_XML1, 'UTF-8') . '</w:t></w:r>';
+
+                    if (!empty($slot->notes)) {
+                        $xml .= '<w:r><w:br/></w:r>
+                                <w:r><w:rPr><w:sz w:val="16"/></w:rPr><w:t>' . htmlspecialchars($slot->notes, ENT_XML1, 'UTF-8') . '</w:t></w:r>';
+                    }
+
+                    $xml .= '</w:p>';
+                } else {
+                    $xml .= '<w:p><w:r><w:t></w:t></w:r></w:p>';
+                }
+
+                $xml .= '</w:tc>';
+            }
+
+            $xml .= '</w:tr>';
+        }
+
+        // Cerrar tabla
+        $xml .= '</w:tbl>';
+
+        // Añadir leyenda después de la tabla
+        $xml .= '<w:p><w:r><w:t>Leyenda:</w:t></w:r></w:p>';
+        $xml .= '<w:p>
+                <w:r><w:rPr><w:shd w:val="clear" w:color="auto" w:fill="E6D0F0"/></w:rPr><w:t>■</w:t></w:r>
+                <w:r><w:t> Codocència | </w:t></w:r>
+                <w:r><w:rPr><w:shd w:val="clear" w:color="auto" w:fill="FEF3C7"/></w:rPr><w:t>■</w:t></w:r>
+                <w:r><w:t> Desdoblament | </w:t></w:r>
+                <w:r><w:rPr><w:shd w:val="clear" w:color="auto" w:fill="FDECDC"/></w:rPr><w:t>■</w:t></w:r>
+                <w:r><w:t> Desdoblament + Codocència | </w:t></w:r>
+                <w:r><w:rPr><w:shd w:val="clear" w:color="auto" w:fill="DBEAFE"/></w:rPr><w:t>■</w:t></w:r>
+                <w:r><w:t> Pati/Descans</w:t></w:r>
+            </w:p>';
+
+        return $xml;
     }
 }

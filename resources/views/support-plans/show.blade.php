@@ -606,8 +606,8 @@
                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                 </svg>
                                                 @endif
-                                            </div>
-                                        </div>
+                        </div>
+                        </div>
                                         <span>Altres professionals (educador/a, tècnic/a d'integració social (TIS), monitors per a l'educació inclusiva a l'escola...):</span>
                     </div>
 
@@ -707,14 +707,34 @@
                                             <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
                                                 @if(in_array('altres_serveis', $professionals))
                                                 <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                                 </svg>
                                                 @endif
                                             </div>
                                         </div>
-                                        <span>Altres serveis:</span>
+                                        <label class="text-md mr-4">{{ __('Altres serveis') }}</label>
                             </div>
                         </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- HORARI ESCOLAR -->
+                    <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                        <tr>
+                            <td colspan="1" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                HORARI ESCOLAR
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border border-gray-800">
+                                @if($supportPlan->timetables->count() > 0)
+                                    @include('components.timetable-display', ['timetable' => $supportPlan->timetables->first()])
+                                @else
+                                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200 text-yellow-700">
+                                        {{ __('No hi ha cap horari definit.') }}
+                                    </div>
+                                @endif
                             </td>
                         </tr>
                     </table>

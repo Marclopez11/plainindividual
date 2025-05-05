@@ -31,7 +31,7 @@
                             </select>
                             @error('team_id')<span class="text-red-500 text-xs mt-1">{{ $message }}</span>@enderror
                             </div>
-                        </div>
+                                </div>
 
                     <!-- Selector de formato -->
                     <div class="mb-6">
@@ -43,7 +43,7 @@
                             <button type="button" class="px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition" id="format-excel" onclick="switchFormat('excel')">
                                 Format Excel
                             </button>
-                        </div>
+                            </div>
                         </div>
 
                     <div id="word-format-content">
@@ -224,8 +224,8 @@
                                                         <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
-                                                </div>
+                                </div>
+                            </div>
                                                 <label>Resultat de l'avaluació inicial de l'alumne/a nouvingut<sup>2</sup></label>
                                             </div>
                                             <div class="flex items-start">
@@ -236,8 +236,8 @@
                                                         <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
-                                                </div>
+                                </div>
+                            </div>
                                                 <label>Avaluació de l'alumne/a d'origen estranger que ja no assisteix a l'aula d'acollida però que rep suport a l'aula ordinària.</label>
                                             </div>
                                             <div class="flex items-start">
@@ -248,7 +248,7 @@
                                                         <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
+                                </div>
                                                 </div>
                                                 <label>Avaluació de l'alumne/a d'origen estranger amb necessitats educatives derivades de la incorporació tardana al sistema educatiu.</label>
                                             </div>
@@ -260,13 +260,13 @@
                                                         <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
-                                                </div>
+                            </div>
+                        </div>
                                                 <label>Decisió de la comissió d'atenció educativa inclusiva (CAEI)</label>
                                                 <input type="text" name="commission_proponent" placeholder="EAP/tutor/docent/família..." class="ml-1 px-2 py-1 border border-gray-300 rounded-md w-auto">
                                                 <label class="ml-1">a proposta de</label>
                                                 <input type="text" name="commission_motivation" class="ml-1 px-2 py-1 border border-gray-300 rounded-md w-1/3">
-                                            </div>
+                        </div>
                                             <div class="flex items-start">
                                                 <div class="relative flex items-center mt-1 mr-2">
                                                     <input type="checkbox" name="justification_reasons[]" value="altres"
@@ -275,13 +275,13 @@
                                                         <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
-                                                </div>
+                                </div>
+                            </div>
                                                 <label>Altres:</label>
                                                 <input type="text" name="justification_other" class="ml-2 px-2 py-1 border border-gray-300 rounded-md w-4/5">
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                        </div>
                                 </td>
                             </tr>
                             <tr>
@@ -590,15 +590,47 @@
                                                     <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                     </svg>
-                                                </div>
-                                            </div>
+                                </div>
+                            </div>
                                             <label>Altres serveis:</label>
-                                        </div>
+                                </div>
+                            </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- HORARI ESCOLAR -->
+                        <div class="rounded-lg border border-gray-300 shadow-sm mb-8 p-4">
+                            <h3 class="text-lg font-semibold mb-4">{{ __('Horari Escolar') }}</h3>
+
+                            <!-- Hidden inputs for timetable data -->
+                            <input type="hidden" name="timetable_data" value="">
+                            <input type="hidden" name="timetable_name" value="Horari Escolar">
+
+                            @include('components.timetable-editor')
+                        </div>
+
+                        <!--OBJECTIUS I CRITERIS D'AVALUACIÓ TRANSVERSALS-->
+                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="1" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    OBJECTIUS I CRITERIS D'AVALUACIÓ TRANSVERSALS
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-800">
+                                    <div class="mb-4">
+                                        <p class="font-bold mb-2">Objectius:</p>
+                                        <textarea name="transversal_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                    </div>
+                                    <div class="mb-4">
+                                        <p class="font-bold mb-2">Criteris:</p>
+                                        <textarea name="transversal_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
                                     </div>
                                 </td>
                             </tr>
                         </table>
-                        </div>
+                                </div>
 
                     <!-- Excel Format (Hidden by default) -->
                     <div id="excel-format-content" class="hidden">
