@@ -190,38 +190,94 @@
                                             }
                                         @endphp
                                         <div class="flex items-start">
-                                            <input type="checkbox" disabled {{ in_array('informe_reconeixement', $justificationReasons) ? 'checked' : '' }} class="mt-1 mr-2">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    @if(in_array('informe_reconeixement', $justificationReasons))
+                                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    @endif
+                                                </div>
+                                            </div>
                                             <span>Informe de reconeixement de necessitat de suport educatiu</span>
-                            </div>
+                                        </div>
                                         <div class="flex items-start">
-                                            <input type="checkbox" disabled {{ in_array('avaluacio_psicopedagogica', $justificationReasons) ? 'checked' : '' }} class="mt-1 mr-2">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    @if(in_array('avaluacio_psicopedagogica', $justificationReasons))
+                                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    @endif
+                                                </div>
+                                            </div>
                                             <span>Avaluació psicopedagògica</span>
-                            </div>
+                                        </div>
                                         <div class="flex items-start">
-                                            <input type="checkbox" disabled {{ in_array('avaluacio_inicial_nouvingut', $justificationReasons) ? 'checked' : '' }} class="mt-1 mr-2">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    @if(in_array('avaluacio_inicial_nouvingut', $justificationReasons))
+                                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    @endif
+                                                </div>
+                                            </div>
                                             <span>Resultat de l'avaluació inicial de l'alumne/a nouvingut<sup>2</sup></span>
-                        </div>
+                                        </div>
                                         <div class="flex items-start">
-                                            <input type="checkbox" disabled {{ in_array('avaluacio_origen_estranger_aula', $justificationReasons) ? 'checked' : '' }} class="mt-1 mr-2">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    @if(in_array('avaluacio_origen_estranger_aula', $justificationReasons))
+                                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    @endif
+                                                </div>
+                                            </div>
                                             <span>Avaluació de l'alumne/a d'origen estranger que ja no assisteix a l'aula d'acollida però que rep suport a l'aula ordinària.</span>
-                        </div>
+                                        </div>
                                         <div class="flex items-start">
-                                            <input type="checkbox" disabled {{ in_array('avaluacio_origen_estranger_tardana', $justificationReasons) ? 'checked' : '' }} class="mt-1 mr-2">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    @if(in_array('avaluacio_origen_estranger_tardana', $justificationReasons))
+                                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    @endif
+                                                </div>
+                                            </div>
                                             <span>Avaluació de l'alumne/a d'origen estranger amb necessitats educatives derivades de la incorporació tardana al sistema educatiu.</span>
-                    </div>
+                                        </div>
                                         <div class="flex items-start">
-                                            <input type="checkbox" disabled {{ in_array('decisio_comissio', $justificationReasons) ? 'checked' : '' }} class="mt-1 mr-2">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    @if(in_array('decisio_comissio', $justificationReasons))
+                                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    @endif
+                                                </div>
+                                            </div>
                                             <span>Decisió de la comissió d'atenció educativa inclusiva (CAEI) a proposta de</span>
                                             <span class="mx-1 font-semibold">{{ $supportPlan->commission_proponent ?? '' }}</span>
                                             <span>motivada per</span>
                                             <span class="ml-1 font-semibold">{{ $supportPlan->commission_motivation ?? '' }}</span>
-                        </div>
+                                        </div>
                                         <div class="flex items-start">
-                                            <input type="checkbox" disabled {{ in_array('altres', $justificationReasons) ? 'checked' : '' }} class="mt-1 mr-2">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    @if(in_array('altres', $justificationReasons))
+                                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    @endif
+                                                </div>
+                                            </div>
                                             <span>Altres: {{ $supportPlan->justification_other ?? '' }}</span>
-                        </div>
-                        </div>
-                    </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -232,8 +288,8 @@
                                     </div>
                                     <div class="p-3 border border-gray-800 col-span-4">
                                         {{ $supportPlan->brief_justification ?? '' }}
-                    </div>
-                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </table>
@@ -293,6 +349,46 @@
                                 {{ $supportPlan->student_interests }}
                             </td>
                         </tr>
+                    </table>
+
+                    <!-- ÀREES, BLOC DE SABERS I SABERS -->
+                    <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                        <tr>
+                            <td colspan="3" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                ÀREES, BLOC DE SABERS I SABERS
+                            </td>
+                        </tr>
+                        <tr class="bg-blue-100">
+                            <td class="p-3 border border-gray-800 font-bold" style="width: 30%;">Àrea o Matèria</td>
+                            <td class="p-3 border border-gray-800 font-bold" style="width: 30%;">Bloc de sabers</td>
+                            <td class="p-3 border border-gray-800 font-bold" style="width: 40%;">Saber</td>
+                        </tr>
+
+                        @php
+                            $areaMateria = $supportPlan->area_materia ?? [];
+                            $blocSabers = $supportPlan->bloc_sabers ?? [];
+                            $saberItems = $supportPlan->saber ?? [];
+
+                            if (!is_array($areaMateria)) {
+                                $areaMateria = [];
+                            }
+                            if (!is_array($blocSabers)) {
+                                $blocSabers = [];
+                            }
+                            if (!is_array($saberItems)) {
+                                $saberItems = [];
+                            }
+
+                            $maxCount = max(count($areaMateria), count($blocSabers), count($saberItems));
+                        @endphp
+
+                        @for ($i = 0; $i < $maxCount; $i++)
+                            <tr>
+                                <td class="p-2 border border-gray-800">{{ $areaMateria[$i] ?? '' }}</td>
+                                <td class="p-2 border border-gray-800">{{ $blocSabers[$i] ?? '' }}</td>
+                                <td class="p-2 border border-gray-800">{{ $saberItems[$i] ?? '' }}</td>
+                            </tr>
+                        @endfor
                     </table>
 
                     <!-- CONCRECIÓ DE LES COMPETÈNCIES TRANSVERSALS DEL PSI -->
@@ -407,54 +503,220 @@
                         @endif
                     </table>
 
-                    <!-- ÀREES, BLOC DE SABERS I SABERS -->
+                    <!-- PROFESSIONALS I SERVEIS QUE HI INTERVENEN -->
                     <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
                         <tr>
-                            <td colspan="3" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
-                                ÀREES, BLOC DE SABERS I SABERS
+                            <td colspan="1" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                PROFESSIONALS I SERVEIS QUE HI INTERVENEN
                             </td>
                         </tr>
-                        <tr class="bg-blue-100">
-                            <td class="p-3 border border-gray-800 font-bold" style="width: 30%;">Àrea o Matèria</td>
-                            <td class="p-3 border border-gray-800 font-bold" style="width: 30%;">Bloc de sabers</td>
-                            <td class="p-3 border border-gray-800 font-bold" style="width: 40%;">Saber</td>
+                        <tr>
+                            <td class="p-3 border border-gray-800">
+                                <div class="space-y-2">
+                                    @php
+                                        $professionals = $supportPlan->professionals ?? [];
+                                        if (!is_array($professionals)) {
+                                            $professionals = [];
+                                        }
+                                    @endphp
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('tutor_responsable', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Tutor/a (responsable de coordinar l'elaboració del PI)</span>
+                                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('tutor_aula_acollida', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Tutor/a aula d'acollida:</span>
+                                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('suport_intensiu', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Suport intensiu a l'escolarització inclusiva (SIEI):</span>
+                                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('aula_integral', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Aula integral de suport (AIS):</span>
+                                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('mestre_educacio_especial', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Mestre/a d'educació especial:</span>
+                                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('assessor_llengua', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Assessor/a de llengua i cohesió social (LIC):</span>
+                                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('altres_professionals', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Altres professionals (educador/a, tècnic/a d'integració social (TIS), monitors per a l'educació inclusiva a l'escola...):</span>
+                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('equip_assessorament', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Equip d'assessorament psicopedagògic (EAP) / treballador/a social:</span>
+                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('serveis_socials', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Serveis socials:</span>
+                        </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('centre_salut_mental', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                        </div>
+                                        </div>
+                                        <span>Centre de salut mental infantil i juvenil (CSMIJ):</span>
+                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('centres_recursos', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Centre de recursos educatius per a deficients auditius (CREDA), centre de recursos educatius per a deficients visuals (CREDV), centres d'educació especial com a centres proveïdors de serveis i recursos (CEEPSIR), fisioterapeuta...:</span>
+                        </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('suports_externs', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                        </div>
+                                        </div>
+                                        <span>Suports externs (centres de psicopedagogia, reforç escolar, activitats del pla educatiu d'entorn...):</span>
+                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('activitats_extraescolars', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Activitats extraescolars:</span>
+                        </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('beques_ajuts', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                        </div>
+                                        </div>
+                                        <span>Beques/Ajuts:</span>
+                    </div>
+
+                                    <div class="flex items-start">
+                                        <div class="relative flex items-center mt-1 mr-2">
+                                            <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                @if(in_array('altres_serveis', $professionals))
+                                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span>Altres serveis:</span>
+                            </div>
+                        </div>
+                            </td>
                         </tr>
-
-                        @php
-                            $areaMateria = $supportPlan->area_materia ?? [];
-                            $blocSabers = $supportPlan->bloc_sabers ?? [];
-                            $saberItems = $supportPlan->saber ?? [];
-
-                            if (!is_array($areaMateria)) $areaMateria = [];
-                            if (!is_array($blocSabers)) $blocSabers = [];
-                            if (!is_array($saberItems)) $saberItems = [];
-
-                            $maxRows = max(count($areaMateria), count($blocSabers), count($saberItems));
-                        @endphp
-
-                        @if($maxRows > 0)
-                            @for($i = 0; $i < $maxRows; $i++)
-                                @if(!empty($areaMateria[$i] ?? '') || !empty($blocSabers[$i] ?? '') || !empty($saberItems[$i] ?? ''))
-                                    <tr>
-                                        <td class="p-2 border border-gray-800">
-                                            {{ $areaMateria[$i] ?? '' }}
-                                        </td>
-                                        <td class="p-2 border border-gray-800">
-                                            {{ $blocSabers[$i] ?? '' }}
-                                        </td>
-                                        <td class="p-2 border border-gray-800">
-                                            {!! nl2br(e($saberItems[$i] ?? '')) !!}
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endfor
-                        @else
-                            <tr>
-                                <td colspan="3" class="p-2 border border-gray-800 text-center text-gray-500">
-                                    No s'han definit àrees, blocs de sabers i sabers
-                                </td>
-                            </tr>
-                        @endif
                     </table>
                 </div>
 

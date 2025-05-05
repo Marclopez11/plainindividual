@@ -10,14 +10,14 @@ Route::get('/', function () {
 
 // Support Plan resource routes - Add auth middleware to all support plan routes
 Route::middleware(['auth'])->group(function () {
-    Route::resource('support-plans', SupportPlanController::class);
+Route::resource('support-plans', SupportPlanController::class);
 
-    // Export routes
-    Route::get('support-plans/{id}/export-excel', [SupportPlanController::class, 'exportToExcel'])
-        ->name('support-plans.exportToExcel');
+// Export routes
+Route::get('support-plans/{id}/export-excel', [SupportPlanController::class, 'exportToExcel'])
+    ->name('support-plans.exportToExcel');
 
-    Route::get('support-plans/{id}/export-word', [SupportPlanController::class, 'exportToWord'])
-        ->name('support-plans.exportToWord');
+Route::get('support-plans/{id}/export-word', [SupportPlanController::class, 'exportToWord'])
+    ->name('support-plans.exportToWord');
 });
 
 Route::middleware([

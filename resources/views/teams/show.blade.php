@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Configuración del Equipo') }}
-            </h2>
+        </h2>
             <span class="inline-flex px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
                 {{ $team->name }}
             </span>
@@ -23,7 +23,7 @@
                     </h3>
                 </div>
                 <div class="p-6">
-                    @livewire('teams.update-team-name-form', ['team' => $team])
+            @livewire('teams.update-team-name-form', ['team' => $team])
                 </div>
             </div>
 
@@ -38,7 +38,7 @@
                     </h3>
                 </div>
                 <div class="p-6">
-                    @livewire('teams.team-member-manager', ['team' => $team])
+            @livewire('teams.team-member-manager', ['team' => $team])
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
                         </h3>
                     </div>
                     <div class="p-6">
-                        @livewire('teams.delete-team-form', ['team' => $team])
+                    @livewire('teams.delete-team-form', ['team' => $team])
                     </div>
                 </div>
             @endif

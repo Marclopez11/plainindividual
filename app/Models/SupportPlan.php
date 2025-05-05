@@ -59,6 +59,7 @@ class SupportPlan extends Model
         'saber',
         'team_id',
         'user_id',
+        'professionals',
     ];
 
     /**
@@ -82,6 +83,7 @@ class SupportPlan extends Model
         'area_materia' => 'array',
         'bloc_sabers' => 'array',
         'saber' => 'array',
+        'professionals' => 'array',
     ];
 
     /**

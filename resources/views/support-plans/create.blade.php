@@ -171,7 +171,7 @@
                                 </td>
                             </tr>
 
-                            <!-- Sexta fila: Altres informacions (fila completa) -->
+                            <!-- Sexta fila: Altres informacions d'interès -->
                             <tr>
                                 <td class="p-2 font-bold border border-gray-800">Altres informacions d'interès:</td>
                                 <td class="p-2 border border-gray-800" colspan="3">
@@ -193,34 +193,90 @@
                                         <p class="font-bold mb-3">Motivat per:<sup>1</sup></p>
                                         <div class="space-y-2">
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="informe_reconeixement" class="mt-1 mr-2">
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="informe_reconeixement"
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Informe de reconeixement de necessitat de suport educatiu</label>
                                             </div>
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_psicopedagogica" class="mt-1 mr-2">
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_psicopedagogica"
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Avaluació psicopedagògica</label>
                                             </div>
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_inicial_nouvingut" class="mt-1 mr-2">
-                                                <label>Resultat de l'avaluació inicial de l'alumnat nouvingut</label>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_inicial_nouvingut"
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <label>Resultat de l'avaluació inicial de l'alumne/a nouvingut<sup>2</sup></label>
                                             </div>
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_origen_estranger_aula" class="mt-1 mr-2">
-                                                <label>Avaluació de l'alumnat d'origen estranger que ja no assisteix a l'aula d'acollida i rep suport a l'aula ordinària</label>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_origen_estranger_aula"
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <label>Avaluació de l'alumne/a d'origen estranger que ja no assisteix a l'aula d'acollida però que rep suport a l'aula ordinària.</label>
                                             </div>
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_origen_estranger_tardana" class="mt-1 mr-2">
-                                                <label>Avaluació de l'alumnat d'origen estranger amb necessitats derivades de la incorporació tardana al sistema educatiu</label>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_origen_estranger_tardana"
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <label>Avaluació de l'alumne/a d'origen estranger amb necessitats educatives derivades de la incorporació tardana al sistema educatiu.</label>
                                             </div>
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="decisio_comissio" class="mt-1 mr-2">
-                                                <label>Decisió de la Comissió d'Atenció Educativa Inclusiva (CAEI)</label>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="decisio_comissio"
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <label>Decisió de la comissió d'atenció educativa inclusiva (CAEI)</label>
                                                 <input type="text" name="commission_proponent" placeholder="EAP/tutor/docent/família..." class="ml-1 px-2 py-1 border border-gray-300 rounded-md w-auto">
                                                 <label class="ml-1">a proposta de</label>
                                                 <input type="text" name="commission_motivation" class="ml-1 px-2 py-1 border border-gray-300 rounded-md w-1/3">
                                             </div>
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="altres" class="mt-1 mr-2">
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="altres"
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Altres:</label>
                                                 <input type="text" name="justification_other" class="ml-2 px-2 py-1 border border-gray-300 rounded-md w-4/5">
                                             </div>
@@ -295,131 +351,6 @@
                             </tr>
                         </table>
 
-                        <!-- CONCRECIÓ DE LES COMPETÈNCIES TRANSVERSALS DEL PSI -->
-                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
-                            <tr>
-                                <td colspan="2" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
-                                    CONCRECIÓ DE LES COMPETÈNCIES TRANSVERSALS DEL PSI
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
-                                    <div class="flex items-center">
-                                        <span class="font-bold mr-1">Objectiu d'aprenentatge</span>
-                                        <span class="text-sm text-gray-500">(7)</span>
-                                    </div>
-                                    <div class="text-sm mb-2">Què volem que aprengui l'alumnat i per a què?</div>
-                                    <div class="text-sm mb-2">CAPACITAT + SABER + FINALITAT</div>
-                                    <div class="text-sm mb-2 italic text-blue-600">Base d'orientació per redactar els objectius d'aprenentatge</div>
-                                </td>
-                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
-                                    <div class="flex items-center">
-                                        <span class="font-bold mr-1">Criteri d'avaluació</span>
-                                        <span class="text-sm text-gray-500">(8)</span>
-                                    </div>
-                                    <div class="text-sm mb-2">Com sabem que ho ha après?</div>
-                                    <div class="text-sm mb-2">ACCIÓ + SABER + CONTEXT</div>
-                                    <div class="text-sm mb-2 italic text-blue-600">Base d'orientació per redactar els criteris d'avaluació dels objectius d'aprenentatge</div>
-                                </td>
-                            </tr>
-                            <!-- First row -->
-                            <tr>
-                                <td class="p-2 border border-gray-800 align-top">
-                                    <textarea name="transversal_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md" placeholder="Reconèixer els aspectes forts del seu estil d'aprenentatge."></textarea>
-                                </td>
-                                <td class="p-2 border border-gray-800 align-top">
-                                    <textarea name="transversal_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md" placeholder="Verbalitzar aspectes que l'ajuden a aprendre."></textarea>
-                                </td>
-                            </tr>
-                            <!-- Second row -->
-                            <tr>
-                                <td class="p-2 border border-gray-800 align-top">
-                                    <textarea name="transversal_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                                </td>
-                                <td class="p-2 border border-gray-800 align-top">
-                                    <textarea name="transversal_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                                </td>
-                            </tr>
-                            <tr id="transversal-container">
-                                <!-- Aquí se insertarán nuevas filas mediante JavaScript -->
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="p-2 border border-gray-800">
-                                    <button type="button" id="add-transversal-row" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        Afegir més files
-                                    </button>
-                                    <span id="transversal-row-counter" class="ml-2 text-sm text-gray-500">2/14 files</span>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <!-- CONCRECIÓ DE LES COMPETÈNCIES DE LES ÀREES DEL PSI -->
-                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
-                            <tr>
-                                <td colspan="2" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
-                                    CONCRECIÓ DE LES COMPETÈNCIES DE LES ÀREES DEL PSI
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
-                                    <div class="flex items-center">
-                                        <span class="font-bold mr-1">Objectiu d'aprenentatge</span>
-                                        <span class="text-sm text-gray-500">(7)</span>
-                                    </div>
-                                    <div class="text-sm mb-2">Què volem que aprengui l'alumnat i per a què?</div>
-                                    <div class="text-sm mb-2">CAPACITAT + SABER + FINALITAT</div>
-                                    <div class="text-sm mb-2 italic text-blue-600">Base d'orientació per redactar els objectius d'aprenentatge</div>
-                                </td>
-                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
-                                    <div class="flex items-center">
-                                        <span class="font-bold mr-1">Criteri d'avaluació</span>
-                                        <span class="text-sm text-gray-500">(8)</span>
-                                    </div>
-                                    <div class="text-sm mb-2">Com sabem que ho ha après?</div>
-                                    <div class="text-sm mb-2">ACCIÓ + SABER + CONTEXT</div>
-                                    <div class="text-sm mb-2 italic text-blue-600">Base d'orientació per redactar els criteris d'avaluació dels objectius d'aprenentatge</div>
-                                </td>
-                            </tr>
-                            <!-- First row -->
-                            <tr>
-                                <td class="p-2 border border-gray-800 align-top">
-                                    <textarea name="learning_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md" placeholder="Comprendre i extreure les idees globals de produccions orals o de vídeos breus relacionats amb situacions d'aprenentatge i la vida d'aula."></textarea>
-                                </td>
-                                <td class="p-2 border border-gray-800 align-top">
-                                    <textarea name="evaluation_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md" placeholder="Explicar la idea global d'una explicació.
-Anomenar el tema d'un vídeo.
-Explicar un detall important per ella d'un tema.
-Seguir les indicacions per abirdar una tasca de manera autònoma."></textarea>
-                                </td>
-                            </tr>
-                            <!-- Second row -->
-                            <tr>
-                                <td class="p-2 border border-gray-800 align-top">
-                                    <textarea name="learning_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                                </td>
-                                <td class="p-2 border border-gray-800 align-top">
-                                    <textarea name="evaluation_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                                </td>
-                            </tr>
-                            <tr id="objectives-container">
-                                <!-- Aquí se insertarán nuevas filas mediante JavaScript -->
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="p-2 border border-gray-800">
-                                    <button type="button" id="add-objective-row" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        Afegir més files
-                                    </button>
-                                    <span id="row-counter" class="ml-2 text-sm text-gray-500">2/20 files</span>
-                                </td>
-                            </tr>
-                        </table>
-
                         <!-- ÀREES, BLOC DE SABERS I SABERS -->
                         <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
                             <tr>
@@ -468,19 +399,214 @@ Seguir les indicacions per abirdar una tasca de manera autònoma."></textarea>
                                         </svg>
                                         Afegir més files
                                     </button>
-                                    <span id="sabers-row-counter" class="ml-2 text-sm text-gray-500">2/25 files</span>
+                                    <span id="sabers-row-counter" class="ml-2 text-sm text-gray-500">2/18 files</span>
                                 </td>
                             </tr>
                         </table>
-                    </div>
+
+                        <!-- PROFESSIONALS I SERVEIS QUE HI INTERVENEN -->
+                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="1" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    PROFESSIONALS I SERVEIS QUE HI INTERVENEN
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-800">
+                                    <div class="space-y-2">
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="tutor_responsable"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Tutor/a (responsable de coordinar l'elaboració del PI)</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="tutor_aula_acollida"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Tutor/a aula d'acollida:</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="suport_intensiu"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Suport intensiu a l'escolarització inclusiva (SIEI):</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="aula_integral"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Aula integral de suport (AIS):</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="mestre_educacio_especial"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Mestre/a d'educació especial:</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="assessor_llengua"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Assessor/a de llengua i cohesió social (LIC):</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="altres_professionals"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Altres professionals (educador/a, tècnic/a d'integració social (TIS), monitors per a l'educació inclusiva a l'escola...):</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="equip_assessorament"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Equip d'assessorament psicopedagògic (EAP) / treballador/a social:</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="serveis_socials"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Serveis socials:</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="centre_salut_mental"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Centre de salut mental infantil i juvenil (CSMIJ):</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="centres_recursos"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Centre de recursos educatius per a deficients auditius (CREDA), centre de recursos educatius per a deficients visuals (CREDV), centres d'educació especial com a centres proveïdors de serveis i recursos (CEEPSIR), fisioterapeuta...:</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="suports_externs"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Suports externs (centres de psicopedagogia, reforç escolar, activitats del pla educatiu d'entorn...):</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="activitats_extraescolars"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Activitats extraescolars:</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="beques_ajuts"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Beques/Ajuts:</label>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="altres_serveis"
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label>Altres serveis:</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
 
                     <!-- Excel Format (Hidden by default) -->
                     <div id="excel-format-content" class="hidden">
                         <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-8" role="alert">
                             <p class="font-bold">Format Excel</p>
                             <p>Els camps per al format Excel estaran disponibles pròximament.</p>
+                            </div>
                         </div>
-                    </div>
 
                     <div class="flex justify-end mt-4">
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
@@ -518,6 +644,31 @@ Seguir les indicacions per abirdar una tasca de manera autònoma."></textarea>
 
         // Add function to handle adding new rows to competencies tables
         document.addEventListener('DOMContentLoaded', function() {
+            // Handle custom checkboxes
+            const customCheckboxes = document.querySelectorAll('.relative input[type="checkbox"]');
+
+            // Initialize checkboxes state
+            customCheckboxes.forEach(function(checkbox) {
+                const checkIndicator = checkbox.nextElementSibling.querySelector('.check-indicator');
+                if (checkbox.checked) {
+                    checkIndicator.classList.remove('hidden');
+                } else {
+                    checkIndicator.classList.add('hidden');
+                }
+            });
+
+            // Add event listeners to each checkbox
+            customCheckboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const checkIndicator = this.nextElementSibling.querySelector('.check-indicator');
+                    if (this.checked) {
+                        checkIndicator.classList.remove('hidden');
+                    } else {
+                        checkIndicator.classList.add('hidden');
+                    }
+                });
+            });
+
             // Competencias de áreas
             const addButton = document.getElementById('add-objective-row');
             const container = document.getElementById('objectives-container');
@@ -595,7 +746,7 @@ Seguir les indicacions per abirdar una tasca de manera autònoma."></textarea>
             const sabersContainer = document.getElementById('sabers-container');
             const sabersRowCounter = document.getElementById('sabers-row-counter');
             let sabersRowCount = 2; // Initial row count
-            const maxSabersRows = 25; // Maximum number of rows allowed
+            const maxSabersRows = 18; // Maximum number of rows allowed
 
             if (addSabersButton) {
                 addSabersButton.addEventListener('click', function() {

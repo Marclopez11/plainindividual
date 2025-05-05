@@ -47,8 +47,8 @@
                             <button type="button" class="px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition" id="format-excel" onclick="switchFormat('excel')">
                                 Format Excel
                             </button>
-                        </div>
-                    </div>
+                                </div>
+                            </div>
 
                     <div id="word-format-content">
                         <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
@@ -192,7 +192,7 @@
                                 </td>
                             </tr>
 
-                            <!-- Sexta fila: Altres informacions (fila completa) -->
+                            <!-- Sexta fila: Altres informacions d'interès -->
                             <tr>
                                 <td class="p-2 font-bold border border-gray-800">Altres informacions d'interès:</td>
                                 <td class="p-2 border border-gray-800" colspan="3">
@@ -215,49 +215,111 @@
                                         <p class="font-bold mb-3">Motivat per:<sup>1</sup></p>
                                         <div class="space-y-2">
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="informe_reconeixement" class="mt-1 mr-2"
-                                                    {{ in_array('informe_reconeixement', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="informe_reconeixement"
+                                                        {{ in_array('informe_reconeixement', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Informe de reconeixement de necessitat de suport educatiu</label>
-                                </div>
+                                            </div>
+
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_psicopedagogica" class="mt-1 mr-2"
-                                                    {{ in_array('avaluacio_psicopedagogica', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_psicopedagogica"
+                                                        {{ in_array('avaluacio_psicopedagogica', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Avaluació psicopedagògica</label>
-                            </div>
+                                            </div>
+
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_inicial_nouvingut" class="mt-1 mr-2"
-                                                    {{ in_array('avaluacio_inicial_nouvingut', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_inicial_nouvingut"
+                                                        {{ in_array('avaluacio_inicial_nouvingut', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Resultat de l'avaluació inicial de l'alumne/a nouvingut<sup>2</sup></label>
-                                </div>
+                                            </div>
+
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_origen_estranger_aula" class="mt-1 mr-2"
-                                                    {{ in_array('avaluacio_origen_estranger_aula', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_origen_estranger_aula"
+                                                        {{ in_array('avaluacio_origen_estranger_aula', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Avaluació de l'alumne/a d'origen estranger que ja no assisteix a l'aula d'acollida però que rep suport a l'aula ordinària.</label>
-                            </div>
+                                            </div>
+
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_origen_estranger_tardana" class="mt-1 mr-2"
-                                                    {{ in_array('avaluacio_origen_estranger_tardana', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_origen_estranger_tardana"
+                                                        {{ in_array('avaluacio_origen_estranger_tardana', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Avaluació de l'alumne/a d'origen estranger amb necessitats educatives derivades de la incorporació tardana al sistema educatiu.</label>
-                        </div>
+                                            </div>
+
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="decisio_comissio" class="mt-1 mr-2"
-                                                    {{ in_array('decisio_comissio', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="decisio_comissio"
+                                                        {{ in_array('decisio_comissio', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Decisió de la comissió d'atenció educativa inclusiva (CAEI) a proposta de</label>
                                                 <input type="text" name="commission_proponent" placeholder="EAP/tutor/docent/família..." class="ml-1 px-2 py-1 border border-gray-300 rounded-md w-auto"
                                                     value="{{ old('commission_proponent', $supportPlan->commission_proponent ?? '') }}">
                                                 <label class="ml-1">motivada per</label>
                                                 <input type="text" name="commission_motivation" class="ml-1 px-2 py-1 border border-gray-300 rounded-md w-1/3"
                                                     value="{{ old('commission_motivation', $supportPlan->commission_motivation ?? '') }}">
-                                </div>
+                                            </div>
+
                                             <div class="flex items-start">
-                                                <input type="checkbox" name="justification_reasons[]" value="altres" class="mt-1 mr-2"
-                                                    {{ in_array('altres', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}>
+                                                <div class="relative flex items-center mt-1 mr-2">
+                                                    <input type="checkbox" name="justification_reasons[]" value="altres"
+                                                        {{ in_array('altres', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
+                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                                 <label>Altres:</label>
                                                 <input type="text" name="justification_other" class="ml-2 px-2 py-1 border border-gray-300 rounded-md w-4/5"
                                                     value="{{ old('justification_other', $supportPlan->justification_other ?? '') }}">
-                                </div>
-                            </div>
-                        </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -327,146 +389,6 @@
                             </tr>
                         </table>
 
-                        <!-- CONCRECIÓ DE LES COMPETÈNCIES TRANSVERSALS DEL PSI -->
-                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
-                            <tr>
-                                <td colspan="2" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
-                                    CONCRECIÓ DE LES COMPETÈNCIES TRANSVERSALS DEL PSI
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
-                                    <div class="flex items-center">
-                                        <span class="font-bold mr-1">Objectiu d'aprenentatge</span>
-                                        <span class="text-sm text-gray-500">(7)</span>
-                                    </div>
-                                    <div class="text-sm mb-2">Què volem que aprengui l'alumnat i per a què?</div>
-                                    <div class="text-sm mb-2">CAPACITAT + SABER + FINALITAT</div>
-                                    <div class="text-sm mb-2 italic text-blue-600">Base d'orientació per redactar els objectius d'aprenentatge</div>
-                                </td>
-                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
-                                    <div class="flex items-center">
-                                        <span class="font-bold mr-1">Criteri d'avaluació</span>
-                                        <span class="text-sm text-gray-500">(8)</span>
-                                    </div>
-                                    <div class="text-sm mb-2">Com sabem que ho ha après?</div>
-                                    <div class="text-sm mb-2">ACCIÓ + SABER + CONTEXT</div>
-                                    <div class="text-sm mb-2 italic text-blue-600">Base d'orientació per redactar els criteris d'avaluació dels objectius d'aprenentatge</div>
-                                </td>
-                            </tr>
-
-                            @php
-                                $transversalObjectives = old('transversal_objectives', $supportPlan->transversal_objectives ?? []);
-                                $transversalCriteria = old('transversal_criteria', $supportPlan->transversal_criteria ?? []);
-
-                                // Ensure we have at least 2 rows (filled or empty)
-                                if (count($transversalObjectives) < 2) {
-                                    $transversalObjectives = array_pad($transversalObjectives, 2, '');
-                                }
-                                if (count($transversalCriteria) < 2) {
-                                    $transversalCriteria = array_pad($transversalCriteria, 2, '');
-                                }
-
-                                $transversalRowCount = max(count($transversalObjectives), count($transversalCriteria));
-                            @endphp
-
-                            @for ($i = 0; $i < $transversalRowCount; $i++)
-                                <tr>
-                                    <td class="p-2 border border-gray-800 align-top">
-                                        <textarea name="transversal_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $transversalObjectives[$i] ?? '' }}</textarea>
-                                    </td>
-                                    <td class="p-2 border border-gray-800 align-top">
-                                        <textarea name="transversal_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $transversalCriteria[$i] ?? '' }}</textarea>
-                                    </td>
-                                </tr>
-                            @endfor
-
-                            <tr id="transversal-container">
-                                <!-- Aquí se insertarán nuevas filas mediante JavaScript -->
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="p-2 border border-gray-800">
-                                    <button type="button" id="add-transversal-row" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        Afegir més files
-                                    </button>
-                                    <span id="transversal-row-counter" class="ml-2 text-sm text-gray-500">{{ $transversalRowCount }}/14 files</span>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <!-- CONCRECIÓ DE LES COMPETÈNCIES DE LES ÀREES DEL PSI -->
-                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
-                            <tr>
-                                <td colspan="2" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
-                                    CONCRECIÓ DE LES COMPETÈNCIES DE LES ÀREES DEL PSI
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
-                                    <div class="flex items-center">
-                                        <span class="font-bold mr-1">Objectiu d'aprenentatge</span>
-                                        <span class="text-sm text-gray-500">(7)</span>
-                                    </div>
-                                    <div class="text-sm mb-2">Què volem que aprengui l'alumnat i per a què?</div>
-                                    <div class="text-sm mb-2">CAPACITAT + SABER + FINALITAT</div>
-                                    <div class="text-sm mb-2 italic text-blue-600">Base d'orientació per redactar els objectius d'aprenentatge</div>
-                                </td>
-                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
-                                    <div class="flex items-center">
-                                        <span class="font-bold mr-1">Criteri d'avaluació</span>
-                                        <span class="text-sm text-gray-500">(8)</span>
-                                    </div>
-                                    <div class="text-sm mb-2">Com sabem que ho ha après?</div>
-                                    <div class="text-sm mb-2">ACCIÓ + SABER + CONTEXT</div>
-                                    <div class="text-sm mb-2 italic text-blue-600">Base d'orientació per redactar els criteris d'avaluació dels objectius d'aprenentatge</div>
-                                </td>
-                            </tr>
-
-                            @php
-                                $learningObjectives = old('learning_objectives', $supportPlan->learning_objectives ?? []);
-                                $evaluationCriteria = old('evaluation_criteria', $supportPlan->evaluation_criteria ?? []);
-
-                                // Ensure we have at least 2 rows (filled or empty)
-                                if (count($learningObjectives) < 2) {
-                                    $learningObjectives = array_pad($learningObjectives, 2, '');
-                                }
-                                if (count($evaluationCriteria) < 2) {
-                                    $evaluationCriteria = array_pad($evaluationCriteria, 2, '');
-                                }
-
-                                $areaRowCount = max(count($learningObjectives), count($evaluationCriteria));
-                            @endphp
-
-                            @for ($i = 0; $i < $areaRowCount; $i++)
-                                <tr>
-                                    <td class="p-2 border border-gray-800 align-top">
-                                        <textarea name="learning_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $learningObjectives[$i] ?? '' }}</textarea>
-                                    </td>
-                                    <td class="p-2 border border-gray-800 align-top">
-                                        <textarea name="evaluation_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $evaluationCriteria[$i] ?? '' }}</textarea>
-                                    </td>
-                                </tr>
-                            @endfor
-
-                            <tr id="objectives-container">
-                                <!-- Aquí se insertarán nuevas filas mediante JavaScript -->
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="p-2 border border-gray-800">
-                                    <button type="button" id="add-objective-row" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        Afegir més files
-                                    </button>
-                                    <span id="row-counter" class="ml-2 text-sm text-gray-500">{{ $areaRowCount }}/20 files</span>
-                                </td>
-                            </tr>
-                        </table>
-
                         <!-- ÀREES, BLOC DE SABERS I SABERS -->
                         <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
                             <tr>
@@ -524,11 +446,242 @@
                                         </svg>
                                         Afegir més files
                                     </button>
-                                    <span id="sabers-row-counter" class="ml-2 text-sm text-gray-500">{{ $sabersRowCount }}/25 files</span>
+                                    <span id="sabers-row-counter" class="ml-2 text-sm text-gray-500">{{ $sabersRowCount }}/18 files</span>
                                 </td>
                             </tr>
                         </table>
-                    </div>
+
+                        <!-- PROFESSIONALS I SERVEIS QUE HI INTERVENEN -->
+                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="1" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    PROFESSIONALS I SERVEIS QUE HI INTERVENEN
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-800">
+                                    <div class="space-y-2">
+                                        @php
+                                            $professionals = old('professionals', $supportPlan->professionals ?? []);
+                                            if (!is_array($professionals)) {
+                                                $professionals = [];
+                                            }
+                                        @endphp
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="tutor_responsable"
+                                                    {{ in_array('tutor_responsable', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Tutor/a (responsable de coordinar l'elaboració del PI)</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="tutor_aula_acollida"
+                                                    {{ in_array('tutor_aula_acollida', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Tutor/a aula d'acollida:</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="suport_intensiu"
+                                                    {{ in_array('suport_intensiu', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Suport intensiu a l'escolarització inclusiva (SIEI):</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="aula_integral"
+                                                    {{ in_array('aula_integral', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Aula integral de suport (AIS):</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="mestre_educacio_especial"
+                                                    {{ in_array('mestre_educacio_especial', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Mestre/a d'educació especial:</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="assessor_llengua"
+                                                    {{ in_array('assessor_llengua', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Assessor/a de llengua i cohesió social (LIC):</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="altres_professionals"
+                                                    {{ in_array('altres_professionals', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Altres professionals (educador/a, tècnic/a d'integració social (TIS), monitors per a l'educació inclusiva a l'escola...):</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="equip_assessorament"
+                                                    {{ in_array('equip_assessorament', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Equip d'assessorament psicopedagògic (EAP) / treballador/a social:</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="serveis_socials"
+                                                    {{ in_array('serveis_socials', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Serveis socials:</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="centre_salut_mental"
+                                                    {{ in_array('centre_salut_mental', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Centre de salut mental infantil i juvenil (CSMIJ):</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="centres_recursos"
+                                                    {{ in_array('centres_recursos', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Centre de recursos educatius per a deficients auditius (CREDA), centre de recursos educatius per a deficients visuals (CREDV), centres d'educació especial com a centres proveïdors de serveis i recursos (CEEPSIR), fisioterapeuta...:</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="suports_externs"
+                                                    {{ in_array('suports_externs', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Suports externs (centres de psicopedagogia, reforç escolar, activitats del pla educatiu d'entorn...):</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="activitats_extraescolars"
+                                                    {{ in_array('activitats_extraescolars', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Activitats extraescolars:</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="beques_ajuts"
+                                                    {{ in_array('beques_ajuts', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Beques/Ajuts:</span>
+                                        </div>
+
+                                        <div class="flex items-start">
+                                            <div class="relative flex items-center mt-1 mr-2">
+                                                <input type="checkbox" name="professionals[]" value="altres_serveis"
+                                                    {{ in_array('altres_serveis', $professionals) ? 'checked' : '' }}
+                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
+                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
+                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span>Altres serveis:</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
 
                     <!-- Excel Format (Hidden by default) -->
                     <div id="excel-format-content" class="hidden">
@@ -575,86 +728,38 @@
             }
         }
 
-        // Add function to handle adding new rows to competencies tables
         document.addEventListener('DOMContentLoaded', function() {
-            // Competencias transversales
-            const addTransversalButton = document.getElementById('add-transversal-row');
-            const transversalContainer = document.getElementById('transversal-container');
-            const transversalRowCounter = document.getElementById('transversal-row-counter');
-            let transversalRowCount = {{ $transversalRowCount }}; // Initial row count from PHP
-            const maxTransversalRows = 14; // Maximum number of rows allowed
+            // Handle custom checkboxes
+            const customCheckboxes = document.querySelectorAll('.relative input[type="checkbox"]');
 
-            if (addTransversalButton) {
-                addTransversalButton.addEventListener('click', function() {
-                    if (transversalRowCount < maxTransversalRows) {
-                        const newRow = document.createElement('tr');
+            // Initialize checkboxes state
+            customCheckboxes.forEach(function(checkbox) {
+                const checkIndicator = checkbox.nextElementSibling.querySelector('.check-indicator');
+                if (checkbox.checked) {
+                    checkIndicator.classList.remove('hidden');
+                } else {
+                    checkIndicator.classList.add('hidden');
+                }
+            });
 
-                        newRow.innerHTML = `
-                            <td class="p-2 border border-gray-800 align-top">
-                                <textarea name="transversal_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                            </td>
-                            <td class="p-2 border border-gray-800 align-top">
-                                <textarea name="transversal_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                            </td>
-                        `;
-
-                        transversalContainer.insertAdjacentElement('beforebegin', newRow);
-                        transversalRowCount++;
-
-                        // Update the counter
-                        transversalRowCounter.textContent = `${transversalRowCount}/${maxTransversalRows} files`;
-
-                        // Disable button when max rows reached
-                        if (transversalRowCount >= maxTransversalRows) {
-                            addTransversalButton.disabled = true;
-                            addTransversalButton.classList.add('opacity-50', 'cursor-not-allowed');
-                        }
+            // Add event listeners to each checkbox
+            customCheckboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const checkIndicator = this.nextElementSibling.querySelector('.check-indicator');
+                    if (this.checked) {
+                        checkIndicator.classList.remove('hidden');
+                    } else {
+                        checkIndicator.classList.add('hidden');
                     }
                 });
-            }
-
-            // Competencias de áreas
-            const addButton = document.getElementById('add-objective-row');
-            const container = document.getElementById('objectives-container');
-            const rowCounter = document.getElementById('row-counter');
-            let rowCount = {{ $areaRowCount }}; // Initial row count from PHP
-            const maxRows = 20; // Maximum number of rows allowed
-
-            if (addButton) {
-                addButton.addEventListener('click', function() {
-                    if (rowCount < maxRows) {
-                        const newRow = document.createElement('tr');
-
-                        newRow.innerHTML = `
-                            <td class="p-2 border border-gray-800 align-top">
-                                <textarea name="learning_objectives[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                            </td>
-                            <td class="p-2 border border-gray-800 align-top">
-                                <textarea name="evaluation_criteria[]" rows="4" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                            </td>
-                        `;
-
-                        container.insertAdjacentElement('beforebegin', newRow);
-                        rowCount++;
-
-                        // Update the counter
-                        rowCounter.textContent = `${rowCount}/${maxRows} files`;
-
-                        // Disable button when max rows reached
-                        if (rowCount >= maxRows) {
-                            addButton.disabled = true;
-                            addButton.classList.add('opacity-50', 'cursor-not-allowed');
-                        }
-                    }
-                });
-            }
+            });
 
             // Àrees, bloc de sabers i sabers
             const addSabersButton = document.getElementById('add-sabers-row');
             const sabersContainer = document.getElementById('sabers-container');
             const sabersRowCounter = document.getElementById('sabers-row-counter');
-            let sabersRowCount = {{ $sabersRowCount }}; // Initial row count from PHP
-            const maxSabersRows = 25; // Maximum number of rows allowed
+            let sabersRowCount = {{ $sabersRowCount ?? 2 }}; // Initial row count from PHP
+            const maxSabersRows = 18; // Maximum number of rows allowed
 
             if (addSabersButton) {
                 addSabersButton.addEventListener('click', function() {

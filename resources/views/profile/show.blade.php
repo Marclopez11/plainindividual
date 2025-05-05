@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Mi Perfil') }}
-            </h2>
+        </h2>
             <span class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -27,7 +27,7 @@
                         </h3>
                     </div>
                     <div class="p-6">
-                        @livewire('profile.update-profile-information-form')
+                @livewire('profile.update-profile-information-form')
                     </div>
                 </div>
             @endif
@@ -44,7 +44,7 @@
                         </h3>
                     </div>
                     <div class="p-6">
-                        @livewire('profile.update-password-form')
+                    @livewire('profile.update-password-form')
                     </div>
                 </div>
             @endif
@@ -61,7 +61,7 @@
                         </h3>
                     </div>
                     <div class="p-6">
-                        @livewire('profile.two-factor-authentication-form')
+                    @livewire('profile.two-factor-authentication-form')
                     </div>
                 </div>
             @endif
@@ -77,7 +77,7 @@
                     </h3>
                 </div>
                 <div class="p-6">
-                    @livewire('profile.logout-other-browser-sessions-form')
+                @livewire('profile.logout-other-browser-sessions-form')
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                         </h3>
                     </div>
                     <div class="p-6">
-                        @livewire('profile.delete-user-form')
+                    @livewire('profile.delete-user-form')
                     </div>
                 </div>
             @endif

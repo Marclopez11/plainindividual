@@ -3,7 +3,7 @@
     <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700 p-10 flex-col justify-center items-center text-white">
         <div class="max-w-md mx-auto">
             <div class="mb-8">
-                {{ $logo }}
+        {{ $logo }}
             </div>
             <h1 class="text-4xl font-bold mb-6">Plan de Soporte Individualizado</h1>
             <p class="text-xl mb-8">Una herramienta para crear y gestionar planes de apoyo personalizados para cada estudiante.</p>
@@ -23,7 +23,7 @@
             </div>
 
             <div class="bg-white shadow-xl rounded-lg p-8 border border-gray-100">
-                {{ $slot }}
+        {{ $slot }}
             </div>
         </div>
     </div>
