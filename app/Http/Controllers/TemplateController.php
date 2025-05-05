@@ -140,7 +140,18 @@ class TemplateController extends Controller
             'centros_anteriores' => 'Centros donde ha estado matriculado anteriormente',
             'escolarizacion_previa' => 'Escolarización previa',
             'retencion_curso' => 'Retención de curso',
-            'otra_informacion' => 'Otra información de interés'
+            'otra_informacion' => 'Otra información de interés',
+            'motivado_informe_reconeixement' => 'X si está motivado por Informe de reconeixement',
+            'motivado_avaluacio_psicopedagogica' => 'X si está motivado por Avaluació psicopedagògica',
+            'motivado_avaluacio_inicial_nouvingut' => 'X si está motivado por Avaluació inicial nouvingut',
+            'motivado_avaluacio_origen_estranger_aula' => 'X si está motivado por Avaluació origen estranger (aula)',
+            'motivado_avaluacio_origen_estranger_tardana' => 'X si está motivado por Avaluació origen estranger (tardana)',
+            'motivado_decisio_comissio' => 'X si está motivado por Decisió comissió',
+            'motivado_altres' => 'X si está motivado por Altres',
+            'justificacion_other' => 'Texto para Altres justificación',
+            'commission_proponent' => 'Proponente de la comisión (EAP/tutor/etc)',
+            'commission_motivation' => 'Motivación de la comisión',
+            'brief_justification' => 'Justificación breve del PSI',
         ];
 
         return view('templates.placeholders', compact('placeholders'));
