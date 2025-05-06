@@ -364,8 +364,8 @@
                                                 <label>Altres:</label>
                                                 <input type="text" name="justification_other"
                                                     class="ml-2 px-2 py-1 border border-gray-300 rounded-md w-4/5">
-                                </div>
                             </div>
+                        </div>
                                 </td>
                             </tr>
                             <tr>
@@ -517,43 +517,43 @@
                             </tr>
 
                             <tbody id="sabers-container">
-                                <!-- Se muestran siempre 2 filas iniciales -->
+                            <!-- Se muestran siempre 2 filas iniciales -->
                                 <tr class="saber-row">
-                                    <td class="p-2 border border-gray-800">
-                                        <input type="text" name="area_materia[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
-                                    </td>
-                                    <td class="p-2 border border-gray-800">
-                                        <input type="text" name="bloc_sabers[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
-                                    </td>
-                                    <td class="p-2 border border-gray-800">
+                                <td class="p-2 border border-gray-800">
+                                    <input type="text" name="area_materia[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                </td>
+                                <td class="p-2 border border-gray-800">
+                                    <input type="text" name="bloc_sabers[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                </td>
+                                <td class="p-2 border border-gray-800">
                                         <div class="flex items-center gap-2">
-                                            <textarea name="saber[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                    <textarea name="saber[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
                                             <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
                                             </button>
                                         </div>
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                                 <tr class="saber-row">
-                                    <td class="p-2 border border-gray-800">
-                                        <input type="text" name="area_materia[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
-                                    </td>
-                                    <td class="p-2 border border-gray-800">
-                                        <input type="text" name="bloc_sabers[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
-                                    </td>
-                                    <td class="p-2 border border-gray-800">
+                                <td class="p-2 border border-gray-800">
+                                    <input type="text" name="area_materia[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                </td>
+                                <td class="p-2 border border-gray-800">
+                                    <input type="text" name="bloc_sabers[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                </td>
+                                <td class="p-2 border border-gray-800">
                                         <div class="flex items-center gap-2">
-                                            <textarea name="saber[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                    <textarea name="saber[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
                                             <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
                                             </button>
                                         </div>
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                             </tbody>
 
                             <tr>
@@ -852,6 +852,139 @@
                             @include('components.timetable-editor')
                         </div>
 
+                        <!-- CONCRECIÓ DE LES COMPETÈNCIES DE LES ÀREES DEL PSI -->
+                        <table id="learning-table" class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="2" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    CONCRECIÓ DE LES COMPETÈNCIES DE LES ÀREES DEL PSI
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
+                                    <div class="flex items-center">
+                                        <span class="font-bold mr-1">Objectiu d'aprenentatge</span>
+                                        <span class="text-sm text-gray-500">(7)</span>
+                                    </div>
+                                    <div class="text-sm mb-2">Què volem que aprengui l'alumnat i per a què?</div>
+                                    <div class="text-sm mb-2">CAPACITAT + SABER + FINALITAT</div>
+                                </td>
+                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
+                                    <div class="flex items-center">
+                                        <span class="font-bold mr-1">Criteri d'avaluació</span>
+                                        <span class="text-sm text-gray-500">(8)</span>
+                                    </div>
+                                    <div class="text-sm mb-2">Com sabem que ho ha après?</div>
+                                    <div class="text-sm mb-2">ACCIÓ + SABER + CONTEXT</div>
+                                </td>
+                            </tr>
+
+                            <tbody id="learning-container">
+                                <tr class="learning-row" data-row-index="0">
+                                    <td class="p-2 border border-gray-800">
+                                        <textarea name="learning_objectives[0]" rows="3" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                    </td>
+                                    <td class="p-2 border border-gray-800">
+                                        <div class="flex items-center gap-2">
+                                            <textarea name="evaluation_criteria[0]" rows="3" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                            <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0 hidden">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                            <tr>
+                                <td colspan="2" class="p-2 border border-gray-800">
+                                    <button type="button" id="add-learning-row" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Afegir més files
+                                    </button>
+                                    <span id="learning-counter" class="ml-2 text-sm text-gray-500">1/10 files</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <template id="learning-row-template">
+                            <tr class="learning-row" data-row-index="__INDEX__">
+                                <td class="p-2 border border-gray-800">
+                                    <textarea name="learning_objectives[__INDEX__]" rows="3" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                </td>
+                                <td class="p-2 border border-gray-800">
+                                    <div class="flex items-center gap-2">
+                                        <textarea name="evaluation_criteria[__INDEX__]" rows="3" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                        <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const container = document.getElementById('learning-container');
+                            const addButton = document.getElementById('add-learning-row');
+                            const rowTemplate = document.getElementById('learning-row-template');
+                            const counter = document.getElementById('learning-counter');
+                            const maxRows = 10;
+                            let currentRows = 1;
+
+                            function updateCounter() {
+                                counter.textContent = currentRows + '/' + maxRows + ' files';
+                                addButton.style.display = currentRows >= maxRows ? 'none' : 'inline-flex';
+                            }
+
+                            function updateDeleteButtons() {
+                                const rows = container.querySelectorAll('.learning-row');
+                                rows.forEach(row => {
+                                    const deleteButton = row.querySelector('.delete-row');
+                                    if (deleteButton) {
+                                        deleteButton.classList.toggle('hidden', rows.length === 1);
+                                    }
+                                });
+                            }
+
+                            addButton.addEventListener('click', function() {
+                                if (currentRows >= maxRows) return;
+
+                                const newRow = rowTemplate.content.cloneNode(true);
+                                const rowIndex = currentRows;
+                                
+                                newRow.querySelector('.learning-row').dataset.rowIndex = rowIndex;
+                                newRow.querySelector('[name^="learning_objectives"]').name = `learning_objectives[${rowIndex}]`;
+                                newRow.querySelector('[name^="evaluation_criteria"]').name = `evaluation_criteria[${rowIndex}]`;
+
+                                container.appendChild(newRow);
+                                currentRows++;
+                                updateCounter();
+                                updateDeleteButtons();
+                            });
+
+                            container.addEventListener('click', function(e) {
+                                if (e.target.closest('.delete-row')) {
+                                    const row = e.target.closest('.learning-row');
+                                    if (currentRows > 1) {
+                                        row.remove();
+                                        currentRows--;
+                                        updateCounter();
+                                        updateDeleteButtons();
+                                    }
+                                }
+                            });
+
+                            // Inicialización
+                            updateCounter();
+                            updateDeleteButtons();
+                        });
+                        </script>
+
                         <!-- REUNIONS DE SEGUIMENT -->
                         <div class="space-y-8 mt-8">
                             <!-- REUNIONS DE SEGUIMENT I ACORDS AMB L'ALUMNE/A -->
@@ -886,7 +1019,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
                                             </button>
-                                        </div>
+                                </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -935,7 +1068,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
                                             </button>
-                                        </div>
+                            </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -978,7 +1111,7 @@
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="acords[0][tipus][]" value="continuitat" class="mr-2">
                                                 <span>Continuïtat</span>
-                                            </div>
+                            </div>
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="acords[0][tipus][]" value="modificacio" class="mr-2">
                                                 <span>Modificació</span>
@@ -1070,7 +1203,7 @@
                     deleteButtons.forEach(button => {
                         if (rowCount > 1) {
                             button.style.display = 'block';
-                        } else {
+                } else {
                             button.style.display = 'none';
                         }
                     });
@@ -1088,9 +1221,9 @@
                 });
 
                 // Manejar adición de filas
-                if (addButton) {
-                    addButton.addEventListener('click', function() {
-                        if (rowCount < maxRows) {
+            if (addButton) {
+                addButton.addEventListener('click', function() {
+                    if (rowCount < maxRows) {
                             const lastRow = container.querySelector('.' + rowClass + ':last-child');
                             if (lastRow) {
                                 const newRow = lastRow.cloneNode(true);
@@ -1100,10 +1233,10 @@
                                 });
                                 container.appendChild(newRow);
                                 updateRowCount();
-                            }
                         }
-                    });
-                }
+                    }
+                });
+            }
 
                 // Inicializar contador y botones de eliminar
                 updateRowCount();
