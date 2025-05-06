@@ -10,6 +10,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SupportPlanExport;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\SimpleType\TblWidth;
+use PhpOffice\PhpWord\SimpleType\Jc;
 use PhpOffice\PhpWord\Style\Font;
 use PhpOffice\PhpWord\Style\Paragraph;
 use PhpOffice\PhpWord\Style\Table;
@@ -382,49 +384,226 @@ class SupportPlanController extends Controller
                 throw new \Exception('La plantilla de Word no se encontró.');
             }
 
-            // Procesar variables básicas
-            $variables = $this->prepareTemplateVariables($supportPlan);
+            // Crear un nuevo documento PHPWord para la tabla
+            $phpWord = new PhpWord();
+            $section = $phpWord->addSection();
+            
+            // Crear la tabla del horario
+            $table = $section->addTable([
+                'borderSize' => 6,
+                'borderColor' => '000000',
+                'width' => 100,
+                'unit' => TblWidth::PERCENT,
+                'alignment' => Jc::CENTER,
+                'cellMargin' => 80
+            ]);
 
-            // Procesar los datos de áreas, bloques y saberes
+            // Obtener el horario
+            $timetable = $supportPlan->timetables()->first();
+            
+            if ($timetable) {
+                // Definir anchos de columna (en twips)
+                $columnWidths = [
+                    2000,  // HORA
+                    3000,  // DILLUNS
+                    3000,  // DIMARTS
+                    3000,  // DIMECRES
+                    3000,  // DIJOUS
+                    3000   // DIVENDRES
+                ];
+
+                // Añadir encabezados
+                $table->addRow(400); // Altura de fila específica
+                $headers = ['HORA', 'DILLUNS', 'DIMARTS', 'DIMECRES', 'DIJOUS', 'DIVENDRES'];
+                foreach ($headers as $index => $header) {
+                    $cell = $table->addCell($columnWidths[$index], [
+                        'bgColor' => '6ab0e6',
+                        'valign' => 'center',
+                        'vMerge' => 'restart',
+                        'spacing' => 80,
+                        'spaceAfter' => 80,
+                        'spaceBefore' => 80
+                    ]);
+                    $cell->addText($header, [
+                        'bold' => true,
+                        'color' => 'FFFFFF',
+                        'size' => 10
+                    ], [
+                        'alignment' => 'center',
+                        'spaceBefore' => 50,
+                        'spaceAfter' => 50
+                    ]);
+                }
+
+                // Organizar slots por tiempo
+                $timeSlots = [];
+                foreach ($timetable->slots as $slot) {
+                    $timeKey = $slot->time_start . '-' . $slot->time_end;
+                    if (!isset($timeSlots[$timeKey])) {
+                        $timeSlots[$timeKey] = [
+                            'start' => $slot->time_start,
+                            'end' => $slot->time_end,
+                            'slots' => []
+                        ];
+                    }
+                    $timeSlots[$timeKey]['slots'][$slot->day] = $slot;
+                }
+
+                // Ordenar por hora de inicio
+                uksort($timeSlots, function($a, $b) use ($timeSlots) {
+                    return strtotime($timeSlots[$a]['start']) - strtotime($timeSlots[$b]['start']);
+                });
+
+                $days = ['DILLUNS', 'DIMARTS', 'DIMECRES', 'DIJOUS', 'DIVENDRES'];
+
+                // Generar filas
+                foreach ($timeSlots as $timeData) {
+                    $table->addRow(350); // Altura específica para las filas de contenido
+                    
+                    // Columna de hora
+                    $cell = $table->addCell($columnWidths[0], [
+                        'valign' => 'center',
+                        'spacing' => 50,
+                        'spaceAfter' => 50,
+                        'spaceBefore' => 50
+                    ]);
+                    $cell->addText(
+                        $timeData['start'] . ' - ' . $timeData['end'],
+                        ['size' => 9],
+                        ['alignment' => 'center']
+                    );
+
+                    // Columnas de días
+                    foreach ($days as $index => $day) {
+                        $slot = $timeData['slots'][$day] ?? null;
+                        $bgColor = 'FFFFFF'; // Default white
+
+                        if ($slot) {
+                            switch ($slot->type) {
+                                case 'codocencia':
+                                    $bgColor = 'E9D5FF';
+                                    break;
+                                case 'desdoblament':
+                                    $bgColor = 'FEF9C3';
+                                    break;
+                                case 'desdoblament_codocencia':
+                                    $bgColor = 'FFEDD5';
+                                    break;
+                                case 'pati':
+                                    $bgColor = 'DBEAFE';
+                                    break;
+                            }
+                        }
+
+                        $cell = $table->addCell($columnWidths[$index + 1], [
+                            'bgColor' => $bgColor,
+                            'valign' => 'center',
+                            'spacing' => 50,
+                            'spaceAfter' => 50,
+                            'spaceBefore' => 50
+                        ]);
+
+                        if ($slot) {
+                            $cell->addText(
+                                $slot->subject,
+                                ['size' => 9],
+                                ['alignment' => 'center']
+                            );
+                            if ($slot->notes) {
+                                $cell->addText(
+                                    $slot->notes,
+                                    ['size' => 8, 'italic' => true],
+                                    ['alignment' => 'center']
+                                );
+                            }
+                        }
+                    }
+                }
+            } else {
+                $table->addRow();
+                $cell = $table->addCell(11500, [
+                    'gridSpan' => 6,
+                    'valign' => 'center'
+                ]);
+                $cell->addText('No hi ha cap horari definit.', [], ['alignment' => 'center']);
+            }
+
+            // Guardar la tabla temporalmente
+            $tempTableFile = tempnam(sys_get_temp_dir(), 'table_');
+            $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+            $objWriter->save($tempTableFile);
+
+            // Leer el contenido de la tabla
+            $zipTable = new \ZipArchive();
+            $zipTable->open($tempTableFile);
+            $tableXml = $zipTable->getFromName('word/document.xml');
+            $zipTable->close();
+            unlink($tempTableFile);
+
+            // Extraer solo el XML de la tabla
+            preg_match('/<w:tbl>.*<\/w:tbl>/s', $tableXml, $matches);
+            $tableOnlyXml = $matches[0];
+
+            // Preparar variables para la plantilla
+            $variables = $this->prepareTemplateVariables($supportPlan);
             $variables = array_merge($variables, $this->prepareSaberVariables($supportPlan));
 
-            // Usar el enfoque directo para procesar la plantilla
-            $tempFile = $this->processDocxTemplate($templatePath, $variables);
+            // Crear una copia temporal de la plantilla
+            $tempFile = tempnam(sys_get_temp_dir(), 'docx_');
+            copy($templatePath, $tempFile);
+
+            // Abrir la plantilla
+            $zip = new \ZipArchive();
+            if ($zip->open($tempFile) === true) {
+                // Leer el contenido del documento
+                $documentXml = $zip->getFromName('word/document.xml');
+                $originalXml = $documentXml; // Guardar una copia del XML original
+
+                // Reemplazar todas las variables excepto la tabla
+                foreach ($variables as $key => $value) {
+                    if ($key !== 'horari_escolar') {
+                        $value = htmlspecialchars($value, ENT_XML1, 'UTF-8');
+                        $documentXml = str_replace('${'.$key.'}', $value, $documentXml);
+                    }
+                }
+
+                // Buscar el párrafo exacto que contiene el marcador
+                if (preg_match('/<w:p\b[^>]*>(?:(?!<w:p\b|<\/w:p>).)*\${horari_escolar}(?:(?!<w:p\b|<\/w:p>).)*<\/w:p>/s', $documentXml, $matches)) {
+                    $paragraphToReplace = $matches[0];
+                    // Reemplazar solo ese párrafo específico con la tabla
+                    $documentXml = str_replace($paragraphToReplace, $tableOnlyXml, $documentXml);
+                } else {
+                    // Si no encontramos el párrafo exacto, intentar un reemplazo directo más seguro
+                    $documentXml = str_replace('${horari_escolar}', $tableOnlyXml, $documentXml);
+                }
+
+                // Verificar que el documento no esté vacío o corrupto
+                if (empty($documentXml) || !str_contains($documentXml, '<w:document')) {
+                    // Restaurar el XML original si algo salió mal
+                    $documentXml = $originalXml;
+                    throw new \Exception('El documento resultante está vacío o corrupto.');
+                }
+
+                // Verificar que el contenido importante se mantuvo
+                if (!str_contains($documentXml, '<w:document')) {
+                    $documentXml = $originalXml;
+                    throw new \Exception('Se perdió contenido importante del documento durante el proceso.');
+                }
+
+                // Actualizar el documento
+                $zip->addFromString('word/document.xml', $documentXml);
+                $zip->close();
+            }
 
             // Generar el nombre del archivo
             $filename = 'plan_de_soporte_' . $supportPlan->student_name . '_' . date('Y-m-d') . '.docx';
-            $filename = str_replace(' ', '_', $filename); // Reemplazar espacios con guiones bajos
+            $filename = str_replace(' ', '_', $filename);
 
             // Descargar el archivo
             return response()->download($tempFile, $filename)->deleteFileAfterSend(true);
 
         } catch (\Exception $e) {
-            // Si hay un problema con la plantilla, intentar regenerarla
-            try {
-                // Crear una copia nueva de la plantilla
-                $templateBackup = storage_path('app/templates/plantilla_plan_soporte.docx.bak');
-
-                // Si existe una copia de seguridad, intentar usarla
-                if (file_exists($templateBackup)) {
-                    // Restaurar la plantilla desde la copia de seguridad
-                    copy($templateBackup, storage_path('app/templates/plantilla_plan_soporte.docx'));
-
-                    // Reintentar con la plantilla restaurada
-                    $variables = $this->prepareTemplateVariables($supportPlan);
-                    $variables = array_merge($variables, $this->prepareSaberVariables($supportPlan));
-                    $tempFile = $this->processDocxTemplate(storage_path('app/templates/plantilla_plan_soporte.docx'), $variables);
-
-                    return response()->download($tempFile, $filename)->deleteFileAfterSend(true);
-                }
-
-                // Si no existe copia de seguridad, redirigir con mensaje de error
-                return redirect()->back()->with('error', 'No se pudo generar el documento Word. La plantilla parece estar dañada y no se encontró una copia de seguridad: ' . $e->getMessage());
-            } catch (\Exception $innerException) {
-                // Si todos los intentos fallan, mostrar un mensaje de error claro
-                return redirect()->back()->with('error',
-                    'Error al generar el documento Word: ' . $e->getMessage() .
-                    '<br>El problema puede ser con la plantilla Word. Verifique que el archivo existe y no está dañado, o contacte al administrador.');
-            }
+            return redirect()->back()->with('error', 'Error al generar el documento Word: ' . $e->getMessage());
         }
     }
 
@@ -433,88 +612,38 @@ class SupportPlanController extends Controller
      */
     private function prepareTemplateVariables($supportPlan)
     {
-        $variables = [];
-
-        // Datos personales
-        $variables['nombre_estudiante'] = $supportPlan->student_name ?? '';
-        $variables['fecha_nacimiento'] = $supportPlan->birth_date ? $supportPlan->birth_date->format('d/m/Y') : '';
-        $variables['nombre_tutores'] = $supportPlan->tutor_name ?? '';
-        $variables['lugar_nacimiento'] = $supportPlan->birth_place ?? '';
-        $variables['telefono'] = $supportPlan->phone ?? '';
-        $variables['direccion'] = $supportPlan->address ?? '';
-        $variables['lengua_habitual'] = $supportPlan->usual_language ?? '';
-        $variables['otras_lenguas'] = $supportPlan->other_languages ?? '';
-
-        // Datos escolares
-        $variables['curso'] = $supportPlan->course ?? '';
-        $variables['grupo'] = $supportPlan->group ?? '';
-        $variables['tutor'] = $supportPlan->teacher_name ?? '';
-        $variables['fecha_incorporacion_centro'] = $supportPlan->school_incorporation_date ? $supportPlan->school_incorporation_date->format('d/m/Y') : '';
-        $variables['fecha_llegada_catalunya'] = $supportPlan->catalonia_arrival_date ? $supportPlan->catalonia_arrival_date->format('d/m/Y') : '';
-        $variables['fecha_incorporacion_sistema'] = $supportPlan->educational_system_date ? $supportPlan->educational_system_date->format('d/m/Y') : '';
-        $variables['centros_anteriores'] = $supportPlan->previous_schools ?? '';
-        $variables['escolarizacion_previa'] = $supportPlan->previous_schooling ?? '';
-        $variables['retencion_curso'] = $supportPlan->course_retention ?? '';
-        $variables['otra_informacion'] = $supportPlan->other_data ?? '';
-
-        // Datos de competencias, condiciones personales e intereses
-        $variables['competencies_alumne_capabilities'] = $supportPlan->competencies_alumne_capabilities ?? '';
-        $variables['learning_strong_points'] = $supportPlan->learning_strong_points ?? '';
-        $variables['learning_improvement_points'] = $supportPlan->learning_improvement_points ?? '';
-        $variables['student_interests'] = $supportPlan->student_interests ?? '';
-        $variables['brief_justification'] = $supportPlan->brief_justification ?? '';
-
-        // Marcadores de checkbox
-        $checkedBox = '☑';
-        $uncheckedBox = '☐';
-
-        // Datos de justificación
-        $justificationReasons = $supportPlan->justification_reasons ?? [];
-        if (!is_array($justificationReasons)) {
-            $justificationReasons = [];
-        }
-
-        $variables['motivado_informe_reconeixement'] = in_array('informe_reconeixement', $justificationReasons) ? $checkedBox : $uncheckedBox;
-        $variables['motivado_avaluacio_psicopedagogica'] = in_array('avaluacio_psicopedagogica', $justificationReasons) ? $checkedBox : $uncheckedBox;
-        $variables['motivado_avaluacio_inicial_nouvingut'] = in_array('avaluacio_inicial_nouvingut', $justificationReasons) ? $checkedBox : $uncheckedBox;
-        $variables['motivado_avaluacio_origen_estranger_aula'] = in_array('avaluacio_origen_estranger_aula', $justificationReasons) ? $checkedBox : $uncheckedBox;
-        $variables['motivado_avaluacio_origen_estranger_tardana'] = in_array('avaluacio_origen_estranger_tardana', $justificationReasons) ? $checkedBox : $uncheckedBox;
-        $variables['motivado_decisio_comissio'] = in_array('decisio_comissio', $justificationReasons) ? $checkedBox : $uncheckedBox;
-        $variables['motivado_altres'] = in_array('altres', $justificationReasons) ? $checkedBox : $uncheckedBox;
-
-        $variables['justificacion_other'] = $supportPlan->justification_other ?? '';
-        $variables['commission_proponent'] = $supportPlan->commission_proponent ?? '';
-        $variables['commission_motivation'] = $supportPlan->commission_motivation ?? '';
-
-        // Datos de professionals i serveis
-        $professionals = $supportPlan->professionals ?? [];
-        if (!is_array($professionals)) {
-            $professionals = [];
-        }
-
-        // Marcadores de professionals
-        $profesionalMarkers = [
-            'tutor_responsable', 'tutor_aula_acollida', 'suport_intensiu', 'aula_integral',
-            'mestre_educacio_especial', 'assessor_llengua', 'altres_professionals',
-            'equip_assessorament', 'serveis_socials', 'centre_salut_mental',
-            'centres_recursos', 'suports_externs', 'activitats_extraescolars',
-            'beques_ajuts', 'altres_serveis'
+        $variables = [
+            'nombre_estudiante' => $supportPlan->student_name,
+            'fecha_nacimiento' => $supportPlan->birth_date ? $supportPlan->birth_date->format('d/m/Y') : '',
+            'nombre_tutores' => $supportPlan->tutor_name,
+            'lugar_nacimiento' => $supportPlan->birth_place,
+            'telefono' => $supportPlan->phone,
+            'direccion' => $supportPlan->address,
+            'lengua_habitual' => $supportPlan->usual_language,
+            'otras_lenguas' => $supportPlan->other_languages,
+            'curso' => $supportPlan->course,
+            'grupo' => $supportPlan->group,
+            'tutor' => $supportPlan->teacher_name,
+            'fecha_incorporacion_centro' => $supportPlan->school_incorporation_date ? $supportPlan->school_incorporation_date->format('d/m/Y') : '',
+            'fecha_llegada_catalunya' => $supportPlan->catalonia_arrival_date ? $supportPlan->catalonia_arrival_date->format('d/m/Y') : '',
+            'fecha_incorporacion_sistema' => $supportPlan->educational_system_date ? $supportPlan->educational_system_date->format('d/m/Y') : '',
+            'centros_anteriores' => $supportPlan->previous_schools,
+            'escolarizacion_previa' => $supportPlan->previous_schooling,
+            'retencion_curso' => $supportPlan->course_retention,
+            'otra_informacion' => $supportPlan->other_data,
+            'motivado_informe_reconeixement' => in_array('informe_reconeixement', $supportPlan->justification_reasons ?? []) ? 'X' : '',
+            'motivado_avaluacio_psicopedagogica' => in_array('avaluacio_psicopedagogica', $supportPlan->justification_reasons ?? []) ? 'X' : '',
+            'motivado_avaluacio_inicial_nouvingut' => in_array('avaluacio_inicial_nouvingut', $supportPlan->justification_reasons ?? []) ? 'X' : '',
+            'motivado_avaluacio_origen_estranger_aula' => in_array('avaluacio_origen_estranger_aula', $supportPlan->justification_reasons ?? []) ? 'X' : '',
+            'motivado_avaluacio_origen_estranger_tardana' => in_array('avaluacio_origen_estranger_tardana', $supportPlan->justification_reasons ?? []) ? 'X' : '',
+            'motivado_decisio_comissio' => in_array('decisio_comissio', $supportPlan->justification_reasons ?? []) ? 'X' : '',
+            'motivado_altres' => in_array('altres', $supportPlan->justification_reasons ?? []) ? 'X' : '',
+            'justificacion_other' => $supportPlan->justification_other,
+            'commission_proponent' => $supportPlan->commission_proponent,
+            'commission_motivation' => $supportPlan->commission_motivation,
+            'brief_justification' => $supportPlan->brief_justification,
+            'horari_escolar' => $this->generateTimetableHtml($supportPlan->timetables()->first())
         ];
-
-        foreach ($profesionalMarkers as $marker) {
-            $variables['professional_' . $marker] = in_array($marker, $professionals) ? $checkedBox : $uncheckedBox;
-        }
-
-        // Procesar arrays transversales
-        $variables = array_merge($variables, $this->prepareTransversalVariables($supportPlan));
-        $variables = array_merge($variables, $this->prepareLearningVariables($supportPlan));
-
-        // Añadir tabla del horario si existe
-        if ($supportPlan->timetables->count() > 0) {
-            $variables['tabla_horario'] = $this->generateTimetableXml($supportPlan->timetables->first());
-        } else {
-            $variables['tabla_horario'] = '<w:p><w:r><w:t>No hi ha cap horari definit.</w:t></w:r></w:p>';
-        }
 
         return $variables;
     }
@@ -749,21 +878,18 @@ class SupportPlanController extends Controller
     }
 
     /**
-     * Genera el XML para la tabla de horario en formato Word
+     * Genera el HTML para la tabla de horario
      */
-    private function generateTimetableXml($timetable)
+    private function generateTimetableHtml($timetable)
     {
         if (!$timetable) {
             return '<w:p><w:r><w:t>No hi ha cap horari definit.</w:t></w:r></w:p>';
         }
 
-        // Iniciar XML de la tabla
-        $xml = '<w:tbl>';
-
-        // Propiedades de tabla
-        $xml .= '<w:tblPr>
+        $html = '<w:tbl>
+            <w:tblPr>
                 <w:tblStyle w:val="TableGrid"/>
-                <w:tblW w:w="0" w:type="auto"/>
+                <w:tblW w:w="10000" w:type="dxa"/>
                 <w:tblBorders>
                     <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
                     <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
@@ -772,60 +898,27 @@ class SupportPlanController extends Controller
                     <w:insideH w:val="single" w:sz="4" w:space="0" w:color="000000"/>
                     <w:insideV w:val="single" w:sz="4" w:space="0" w:color="000000"/>
                 </w:tblBorders>
-                <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
-            </w:tblPr>';
-
-        // Definir grid para 6 columnas
-        $xml .= '<w:tblGrid>
-                <w:gridCol w:w="1200"/>
-                <w:gridCol w:w="1800"/>
-                <w:gridCol w:w="1800"/>
-                <w:gridCol w:w="1800"/>
-                <w:gridCol w:w="1800"/>
-                <w:gridCol w:w="1800"/>
+            </w:tblPr>
+            <w:tblGrid>
+                <w:gridCol w:w="1500"/>
+                <w:gridCol w:w="1700"/>
+                <w:gridCol w:w="1700"/>
+                <w:gridCol w:w="1700"/>
+                <w:gridCol w:w="1700"/>
+                <w:gridCol w:w="1700"/>
             </w:tblGrid>';
 
         // Encabezado
-        $xml .= '<w:tr>
-                <w:tc>
-                    <w:tcPr>
-                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
-                    </w:tcPr>
-                    <w:p><w:r><w:t></w:t></w:r></w:p>
-                </w:tc>
-                <w:tc>
-                    <w:tcPr>
-                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
-                    </w:tcPr>
-                    <w:p><w:r><w:b/><w:t>DILLUNS</w:t></w:r></w:p>
-                </w:tc>
-                <w:tc>
-                    <w:tcPr>
-                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
-                    </w:tcPr>
-                    <w:p><w:r><w:b/><w:t>DIMARTS</w:t></w:r></w:p>
-                </w:tc>
-                <w:tc>
-                    <w:tcPr>
-                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
-                    </w:tcPr>
-                    <w:p><w:r><w:b/><w:t>DIMECRES</w:t></w:r></w:p>
-                </w:tc>
-                <w:tc>
-                    <w:tcPr>
-                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
-                    </w:tcPr>
-                    <w:p><w:r><w:b/><w:t>DIJOUS</w:t></w:r></w:p>
-                </w:tc>
-                <w:tc>
-                    <w:tcPr>
-                        <w:shd w:val="clear" w:color="auto" w:fill="E5E5E5"/>
-                    </w:tcPr>
-                    <w:p><w:r><w:b/><w:t>DIVENDRES</w:t></w:r></w:p>
-                </w:tc>
+        $html .= '<w:tr>
+            <w:tc><w:p><w:r><w:t>HORA</w:t></w:r></w:p></w:tc>
+            <w:tc><w:p><w:r><w:t>DILLUNS</w:t></w:r></w:p></w:tc>
+            <w:tc><w:p><w:r><w:t>DIMARTS</w:t></w:r></w:p></w:tc>
+            <w:tc><w:p><w:r><w:t>DIMECRES</w:t></w:r></w:p></w:tc>
+            <w:tc><w:p><w:r><w:t>DIJOUS</w:t></w:r></w:p></w:tc>
+            <w:tc><w:p><w:r><w:t>DIVENDRES</w:t></w:r></w:p></w:tc>
             </w:tr>';
 
-        // Organizar las franjas horarias
+        // Organizar slots por tiempo
         $timeSlots = [];
         foreach ($timetable->slots as $slot) {
             $timeKey = $slot->time_start . '-' . $slot->time_end;
@@ -846,87 +939,51 @@ class SupportPlanController extends Controller
 
         $days = ['DILLUNS', 'DIMARTS', 'DIMECRES', 'DIJOUS', 'DIVENDRES'];
 
-        // Añadir filas para cada franja horaria
-        foreach ($timeSlots as $timeKey => $timeData) {
-            $xml .= '<w:tr>';
+        // Generar filas
+        foreach ($timeSlots as $timeData) {
+            $html .= '<w:tr>';
+            
+            // Columna de hora
+            $html .= '<w:tc><w:p><w:r><w:t>' . htmlspecialchars($timeData['start'] . ' - ' . $timeData['end']) . '</w:t></w:r></w:p></w:tc>';
 
-            // Columna de horario
-            $xml .= '<w:tc>
-                    <w:tcPr>
-                        <w:tcW w:w="1200" w:type="dxa"/>
-                    </w:tcPr>
-                    <w:p>
-                        <w:r><w:t>' . htmlspecialchars($timeData['start'], ENT_XML1, 'UTF-8') . '</w:t></w:r>
-                        <w:r><w:br/></w:r>
-                        <w:r><w:t>' . htmlspecialchars($timeData['end'], ENT_XML1, 'UTF-8') . '</w:t></w:r>
-                    </w:p>
-                </w:tc>';
-
-            // Columnas para cada día
+            // Columnas de días
             foreach ($days as $day) {
                 $slot = $timeData['slots'][$day] ?? null;
-                $bgColor = 'FFFFFF'; // Blanco por defecto
+                $bgColor = 'FFFFFF'; // Default white
 
                 if ($slot) {
-                    // Colores según tipo
                     switch ($slot->type) {
                         case 'codocencia':
-                            $bgColor = 'E6D0F0'; // Morado claro (bg-purple-200)
+                            $bgColor = 'E9D5FF'; // purple-200
                             break;
                         case 'desdoblament':
-                            $bgColor = 'FEF3C7'; // Amarillo claro (bg-yellow-200)
+                            $bgColor = 'FEF9C3'; // yellow-200
                             break;
                         case 'desdoblament_codocencia':
-                            $bgColor = 'FDECDC'; // Naranja claro (bg-orange-200)
+                            $bgColor = 'FFEDD5'; // orange-200
                             break;
                         case 'pati':
-                            $bgColor = 'DBEAFE'; // Azul claro (bg-blue-100)
+                            $bgColor = 'DBEAFE'; // blue-100
                             break;
                     }
                 }
 
-                $xml .= '<w:tc>
-                        <w:tcPr>
-                            <w:tcW w:w="1800" w:type="dxa"/>
-                            <w:shd w:val="clear" w:color="auto" w:fill="' . $bgColor . '"/>
-                        </w:tcPr>';
+                $html .= '<w:tc>
+                    <w:tcPr><w:shd w:fill="' . $bgColor . '"/></w:tcPr>
+                    <w:p><w:r><w:t>' . ($slot ? htmlspecialchars($slot->subject) : '') . '</w:t></w:r></w:p>';
 
-                if ($slot) {
-                    $xml .= '<w:p>
-                            <w:r><w:b/><w:t>' . htmlspecialchars($slot->subject, ENT_XML1, 'UTF-8') . '</w:t></w:r>';
-
-                    if (!empty($slot->notes)) {
-                        $xml .= '<w:r><w:br/></w:r>
-                                <w:r><w:rPr><w:sz w:val="16"/></w:rPr><w:t>' . htmlspecialchars($slot->notes, ENT_XML1, 'UTF-8') . '</w:t></w:r>';
-                    }
-
-                    $xml .= '</w:p>';
-                } else {
-                    $xml .= '<w:p><w:r><w:t></w:t></w:r></w:p>';
+                if ($slot && $slot->notes) {
+                    $html .= '<w:p><w:r><w:rPr><w:sz w:val="16"/></w:rPr><w:t>' . htmlspecialchars($slot->notes) . '</w:t></w:r></w:p>';
                 }
 
-                $xml .= '</w:tc>';
+                $html .= '</w:tc>';
             }
 
-            $xml .= '</w:tr>';
+            $html .= '</w:tr>';
         }
 
-        // Cerrar tabla
-        $xml .= '</w:tbl>';
+        $html .= '</w:tbl>';
 
-        // Añadir leyenda después de la tabla
-        $xml .= '<w:p><w:r><w:t>Leyenda:</w:t></w:r></w:p>';
-        $xml .= '<w:p>
-                <w:r><w:rPr><w:shd w:val="clear" w:color="auto" w:fill="E6D0F0"/></w:rPr><w:t>■</w:t></w:r>
-                <w:r><w:t> Codocència | </w:t></w:r>
-                <w:r><w:rPr><w:shd w:val="clear" w:color="auto" w:fill="FEF3C7"/></w:rPr><w:t>■</w:t></w:r>
-                <w:r><w:t> Desdoblament | </w:t></w:r>
-                <w:r><w:rPr><w:shd w:val="clear" w:color="auto" w:fill="FDECDC"/></w:rPr><w:t>■</w:t></w:r>
-                <w:r><w:t> Desdoblament + Codocència | </w:t></w:r>
-                <w:r><w:rPr><w:shd w:val="clear" w:color="auto" w:fill="DBEAFE"/></w:rPr><w:t>■</w:t></w:r>
-                <w:r><w:t> Pati/Descans</w:t></w:r>
-            </w:p>';
-
-        return $xml;
+        return $html;
     }
 }
