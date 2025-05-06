@@ -388,6 +388,9 @@ class SupportPlanController extends Controller
             $phpWord = new PhpWord();
             $section = $phpWord->addSection();
             
+            // Añadir espacio antes de la tabla
+            $section->addTextBreak(2);
+            
             // Crear la tabla del horario
             $table = $section->addTable([
                 'borderSize' => 6,
@@ -631,19 +634,61 @@ class SupportPlanController extends Controller
             'escolarizacion_previa' => $supportPlan->previous_schooling,
             'retencion_curso' => $supportPlan->course_retention,
             'otra_informacion' => $supportPlan->other_data,
-            'motivado_informe_reconeixement' => in_array('informe_reconeixement', $supportPlan->justification_reasons ?? []) ? 'X' : '',
-            'motivado_avaluacio_psicopedagogica' => in_array('avaluacio_psicopedagogica', $supportPlan->justification_reasons ?? []) ? 'X' : '',
-            'motivado_avaluacio_inicial_nouvingut' => in_array('avaluacio_inicial_nouvingut', $supportPlan->justification_reasons ?? []) ? 'X' : '',
-            'motivado_avaluacio_origen_estranger_aula' => in_array('avaluacio_origen_estranger_aula', $supportPlan->justification_reasons ?? []) ? 'X' : '',
-            'motivado_avaluacio_origen_estranger_tardana' => in_array('avaluacio_origen_estranger_tardana', $supportPlan->justification_reasons ?? []) ? 'X' : '',
-            'motivado_decisio_comissio' => in_array('decisio_comissio', $supportPlan->justification_reasons ?? []) ? 'X' : '',
-            'motivado_altres' => in_array('altres', $supportPlan->justification_reasons ?? []) ? 'X' : '',
+            
+            // Justificación
+            'motivado_informe_reconeixement' => in_array('informe_reconeixement', $supportPlan->justification_reasons ?? []) ? '☒' : '☐',
+            'motivado_avaluacio_psicopedagogica' => in_array('avaluacio_psicopedagogica', $supportPlan->justification_reasons ?? []) ? '☒' : '☐',
+            'motivado_avaluacio_inicial_nouvingut' => in_array('avaluacio_inicial_nouvingut', $supportPlan->justification_reasons ?? []) ? '☒' : '☐',
+            'motivado_avaluacio_origen_estranger_aula' => in_array('avaluacio_origen_estranger_aula', $supportPlan->justification_reasons ?? []) ? '☒' : '☐',
+            'motivado_avaluacio_origen_estranger_tardana' => in_array('avaluacio_origen_estranger_tardana', $supportPlan->justification_reasons ?? []) ? '☒' : '☐',
+            'motivado_decisio_comissio' => in_array('decisio_comissio', $supportPlan->justification_reasons ?? []) ? '☒' : '☐',
+            'motivado_altres' => in_array('altres', $supportPlan->justification_reasons ?? []) ? '☒' : '☐',
             'justificacion_other' => $supportPlan->justification_other,
             'commission_proponent' => $supportPlan->commission_proponent,
             'commission_motivation' => $supportPlan->commission_motivation,
             'brief_justification' => $supportPlan->brief_justification,
+
+            // Competencias y aprendizaje
+            'competencies_alumne_capabilities' => trim($supportPlan->competencies_alumne_capabilities) ?: '',
+            'learning_strong_points' => trim($supportPlan->learning_strong_points) ?: '',
+            'learning_improvement_points' => trim($supportPlan->learning_improvement_points) ?: '',
+            'student_interests' => trim($supportPlan->student_interests) ?: '',
+
+            // Profesionales
+            'professional_tutor_responsable' => in_array('tutor_responsable', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_tutor_aula_acollida' => in_array('tutor_aula_acollida', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_suport_intensiu' => in_array('suport_intensiu', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_aula_integral' => in_array('aula_integral', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_mestre_educacio_especial' => in_array('mestre_educacio_especial', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_assessor_llengua' => in_array('assessor_llengua', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_altres_professionals' => in_array('altres_professionals', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_equip_assessorament' => in_array('equip_assessorament', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_serveis_socials' => in_array('serveis_socials', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_centre_salut_mental' => in_array('centre_salut_mental', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_centres_recursos' => in_array('centres_recursos', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_suports_externs' => in_array('suports_externs', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_activitats_extraescolars' => in_array('activitats_extraescolars', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_beques_ajuts' => in_array('beques_ajuts', $supportPlan->professionals ?? []) ? '☒' : '☐',
+            'professional_altres_serveis' => in_array('altres_serveis', $supportPlan->professionals ?? []) ? '☒' : '☐',
+
             'horari_escolar' => $this->generateTimetableHtml($supportPlan->timetables()->first())
         ];
+
+        // Añadir objetivos y criterios regulares (hasta 22)
+        $learningObjectives = $supportPlan->learning_objectives ?? [];
+        $evaluationCriteria = $supportPlan->evaluation_criteria ?? [];
+        for ($i = 1; $i <= 22; $i++) {
+            $variables['objetivo#' . $i] = isset($learningObjectives[$i-1]) ? trim($learningObjectives[$i-1]) : '';
+            $variables['criterio#' . $i] = isset($evaluationCriteria[$i-1]) ? trim($evaluationCriteria[$i-1]) : '';
+        }
+
+        // Añadir objetivos y criterios transversales (hasta 14)
+        $transversalObjectives = $supportPlan->transversal_objectives ?? [];
+        $transversalCriteria = $supportPlan->transversal_criteria ?? [];
+        for ($i = 1; $i <= 14; $i++) {
+            $variables['transversal_objective#' . $i] = isset($transversalObjectives[$i-1]) ? trim($transversalObjectives[$i-1]) : '';
+            $variables['transversal_criteria#' . $i] = isset($transversalCriteria[$i-1]) ? trim($transversalCriteria[$i-1]) : '';
+        }
 
         return $variables;
     }
