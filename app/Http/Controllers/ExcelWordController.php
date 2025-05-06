@@ -373,92 +373,118 @@ class ExcelWordController extends Controller
             }
         }
 
-        // Intentar extraer datos de la tabla de reuniones de seguimiento en la hoja "Desenvolupament"
+        // Intentar extraer datos de la hoja de Desenvolupament
         try {
-            $patternsDesen = ['Desenvolupament', 'Desarrollo', 'Reunions', 'Reuniones', 'Seguiment', 'Seguimiento'];
-            $reunionesSheet = $findSheetByPattern($patternsDesen);
+            $patternsDesenvolupament = ['Desenvolupament', 'Desarrollo', 'Desenvolupament del PI', 'Desarrollo del PI'];
+            $desenvolupamentSheet = $findSheetByPattern($patternsDesenvolupament);
 
-            if ($reunionesSheet) {
-                Log::info("Hoja para tabla de reuniones encontrada: " . $reunionesSheet->getTitle());
+            if (!$desenvolupamentSheet) {
+                Log::info("No se encontró una hoja específica para desenvolupament, intentando usar la hoja activa");
+                $desenvolupamentSheet = $worksheet;
+            }
 
-                // Array para almacenar las filas de la tabla
-                $reunionesRows = [];
-                $maxRow = 30; // Límite máximo de filas a buscar
+            if ($desenvolupamentSheet) {
+                Log::info("Hoja para tabla desenvolupament encontrada: " . $desenvolupamentSheet->getTitle());
 
-                // Extraer datos de la tabla comenzando en B5, C5, D5, E5
-                for ($row = 5; $row <= $maxRow; $row++) {
-                    // Extraer valores de cada columna
-                    $dataValue = $reunionesSheet->getCell('B' . $row)->getValue() ?? '';
-                    $agentsValue = $reunionesSheet->getCell('C' . $row)->getValue() ?? '';
-                    $temesValue = $reunionesSheet->getCell('D' . $row)->getValue() ?? '';
-                    $acordsValue = $reunionesSheet->getCell('E' . $row)->getValue() ?? '';
+                // Extraer datos de les reunions de desenvolupament (B5:E14 per tenir 10 files)
+                for ($i = 1; $i <= 10; $i++) {
+                    $row = $i + 4; // Empezamos en la fila 5 (índex + 4)
 
-                    // Verificar si la fila tiene algún contenido
+                    // Extraer els valors de cada columna
+                    $dataValue = trim($desenvolupamentSheet->getCell('B' . $row)->getValue() ?? '');
+                    $agentsValue = trim($desenvolupamentSheet->getCell('C' . $row)->getValue() ?? '');
+                    $temesValue = trim($desenvolupamentSheet->getCell('D' . $row)->getValue() ?? '');
+                    $acordsValue = trim($desenvolupamentSheet->getCell('E' . $row)->getValue() ?? '');
+
+                    // Asignar els valors a les variables corresponents
+                    $data['desenvolupament_data#' . $i] = $dataValue;
+                    $data['desenvolupament_agents#' . $i] = $agentsValue;
+                    $data['desenvolupament_temes#' . $i] = $temesValue;
+                    $data['desenvolupament_acords#' . $i] = $acordsValue;
+
+                    // Log si se trobà contingut en la fila
                     if (!empty($dataValue) || !empty($agentsValue) || !empty($temesValue) || !empty($acordsValue)) {
-                        // Guardar la fila completa
-                        $reunionesRows[] = [
-                            'data' => $dataValue,
-                            'agents' => $agentsValue,
-                            'temes' => $temesValue,
-                            'acords' => $acordsValue
-                        ];
-
-                        Log::info("Fila de reunión extraída: Data={$dataValue}, Agents={$agentsValue}, Temes={$temesValue}, Acords={$acordsValue}");
-                    } else {
-                        // Si encontramos una fila vacía después de la fila 5, podemos detenernos
-                        // a menos que haya más filas no vacías después
-                        if ($row > 5 && empty($reunionesRows)) {
-                            // No se encontró ninguna fila con datos
-                            break;
-                        } elseif ($row > 5) {
-                            // Verificar si hay más filas con contenido después
-                            $hasMoreContent = false;
-                            for ($checkRow = $row + 1; $checkRow <= $row + 3 && $checkRow <= $maxRow; $checkRow++) {
-                                $checkDataValue = $reunionesSheet->getCell('B' . $checkRow)->getValue() ?? '';
-                                $checkAgentsValue = $reunionesSheet->getCell('C' . $checkRow)->getValue() ?? '';
-                                $checkTemesValue = $reunionesSheet->getCell('D' . $checkRow)->getValue() ?? '';
-                                $checkAcordsValue = $reunionesSheet->getCell('E' . $checkRow)->getValue() ?? '';
-
-                                if (!empty($checkDataValue) || !empty($checkAgentsValue) || !empty($checkTemesValue) || !empty($checkAcordsValue)) {
-                                    $hasMoreContent = true;
-                                    break;
-                                }
-                            }
-
-                            if (!$hasMoreContent) {
-                                // No hay más contenido después de esta fila vacía
-                                break;
-                            }
-                            // Si hay más contenido, continuamos el bucle
-                        }
+                        Log::info("Desenvolupament #{$i} extraít: Data={$dataValue}, Agents={$agentsValue}, Temes={$temesValue}, Acords={$acordsValue}");
                     }
                 }
 
-                // Guardar el número de filas para usarlo en la plantilla
-                $data['reuniones_count'] = count($reunionesRows);
-
-                // Guardar cada fila en variables individuales para compatibilidad
-                for ($i = 0; $i < count($reunionesRows); $i++) {
-                    $index = $i + 1;
-                    $data['reunio_data#' . $index] = $reunionesRows[$i]['data'];
-                    $data['reunio_agents#' . $index] = $reunionesRows[$i]['agents'];
-                    $data['reunio_temes#' . $index] = $reunionesRows[$i]['temes'];
-                    $data['reunio_acords#' . $index] = $reunionesRows[$i]['acords'];
-                }
-
-                // Guardar el array completo para uso posterior (en caso de necesitar uso de tabla dinámica)
-                $data['reuniones_rows'] = $reunionesRows;
-
-                Log::info("Datos de la tabla de reuniones extraídos correctamente: " . count($reunionesRows) . " filas con contenido");
+                Log::info("Dades de desenvolupament extraídes correctament");
             } else {
-                Log::warning("No se encontró la hoja 'Desenvolupament' o similar para la tabla de reuniones");
-                $data['reuniones_count'] = 0;
-                $data['reuniones_rows'] = [];
+                Log::warning("No se trobà una hoja adequada per la taula de desenvolupament");
+                // Inicialitzar totes les variables amb cadenes buides
+                for ($i = 1; $i <= 10; $i++) {
+                    $data['desenvolupament_data#' . $i] = '';
+                    $data['desenvolupament_agents#' . $i] = '';
+                    $data['desenvolupament_temes#' . $i] = '';
+                    $data['desenvolupament_acords#' . $i] = '';
+                }
             }
         } catch (\Exception $e) {
-            Log::warning("Error al extraer datos de la tabla de reuniones: " . $e->getMessage());
-            $data['reuniones_count'] = 0;
-            $data['reuniones_rows'] = [];
+            Log::warning("Error al extraer dades de desenvolupament: " . $e->getMessage());
+            // Inicialitzar les variables amb cadenes buides
+            for ($i = 1; $i <= 10; $i++) {
+                $data['desenvolupament_data#' . $i] = '';
+                $data['desenvolupament_agents#' . $i] = '';
+                $data['desenvolupament_temes#' . $i] = '';
+                $data['desenvolupament_acords#' . $i] = '';
+            }
+        }
+
+        // Intentar extraer datos de la hoja de Seguiment i avaluació
+        try {
+            $patternsSeguiment = ['Seguiment i avaluació', 'Seguiment', 'Seguimiento y evaluación', 'Seguimiento'];
+            $seguimentSheet = $findSheetByPattern($patternsSeguiment);
+
+            if (!$seguimentSheet) {
+                Log::info("No se trobà una hoja específica per Seguiment i avaluació, intentant usar la hoja activa");
+                $seguimentSheet = $worksheet;
+            }
+
+            if ($seguimentSheet) {
+                Log::info("Hoja per Seguiment i avaluació trobada: " . $seguimentSheet->getTitle());
+
+                // Extraer dades de les reunions de seguiment (B5:E14)
+                for ($i = 1; $i <= 10; $i++) {
+                    $row = $i + 4; // Empezamos en la fila 5 (índex + 4)
+
+                    // Extraer els valors de cada columna
+                    $dataValue = trim($seguimentSheet->getCell('B' . $row)->getValue() ?? '');
+                    $agentsValue = trim($seguimentSheet->getCell('C' . $row)->getValue() ?? '');
+                    $temesValue = trim($seguimentSheet->getCell('D' . $row)->getValue() ?? '');
+                    $acordsValue = trim($seguimentSheet->getCell('E' . $row)->getValue() ?? '');
+
+                    // Asignar els valors a les variables corresponents amb el prefix reunio_s_
+                    $data['reunio_s_data#' . $i] = $dataValue;
+                    $data['reunio_s_agents#' . $i] = $agentsValue;
+                    $data['reunio_s_temes#' . $i] = $temesValue;
+                    $data['reunio_s_acords#' . $i] = $acordsValue;
+
+                    // Log si se trobà contingut en la fila
+                    if (!empty($dataValue) || !empty($agentsValue) || !empty($temesValue) || !empty($acordsValue)) {
+                        Log::info("Reunión de seguiment #{$i} extraída: Data={$dataValue}, Agents={$agentsValue}, Temes={$temesValue}, Acords={$acordsValue}");
+                    }
+                }
+
+                Log::info("Dades de seguiment extraídes correctament");
+            } else {
+                Log::warning("No se trobà una hoja adequada per Seguiment i avaluació");
+                // Inicialitzar totes les variables amb cadenes buides
+                for ($i = 1; $i <= 10; $i++) {
+                    $data['reunio_s_data#' . $i] = '';
+                    $data['reunio_s_agents#' . $i] = '';
+                    $data['reunio_s_temes#' . $i] = '';
+                    $data['reunio_s_acords#' . $i] = '';
+                }
+            }
+        } catch (\Exception $e) {
+            Log::warning("Error al extraer dades de seguiment: " . $e->getMessage());
+            // Inicialitzar les variables amb cadenes buides
+            for ($i = 1; $i <= 10; $i++) {
+                $data['reunio_s_data#' . $i] = '';
+                $data['reunio_s_agents#' . $i] = '';
+                $data['reunio_s_temes#' . $i] = '';
+                $data['reunio_s_acords#' . $i] = '';
+            }
         }
 
         // Extraer los checkboxes de justificación
@@ -657,9 +683,6 @@ class ExcelWordController extends Controller
         // Log de todas las variables para debug
         Log::info('Variables disponibles para la plantilla: ' . implode(', ', array_keys($data)));
 
-        // Procesar la tabla de reuniones si existe
-        $this->processReunionesTable($templateProcessor, $data);
-
         // Dividir el proceso de reemplazo en bloques para evitar sobrecarga
         $dataChunks = array_chunk($data, 50, true);
 
@@ -783,149 +806,6 @@ class ExcelWordController extends Controller
     }
 
     /**
-     * Procesa la tabla de reuniones para generar una tabla dinámica en el documento Word
-     */
-    private function processReunionesTable($templateProcessor, $data)
-    {
-        // Verificar si tenemos datos de reuniones
-        if (!isset($data['reuniones_count']) || $data['reuniones_count'] <= 0) {
-            Log::info("No hay datos de reuniones para procesar");
-            return;
-        }
-
-        try {
-            Log::info("Procesando tabla de reuniones con " . $data['reuniones_count'] . " filas");
-
-            // Para evitar el problema de #1#1, usaremos un enfoque diferente
-            // Primero, extraemos las filas que necesitamos
-            $reunionesCount = $data['reuniones_count'];
-
-            // Si tenemos al menos una fila, procedemos
-            if ($reunionesCount > 0) {
-                try {
-                    // Primero, guardamos los valores originales de la primera fila
-                    $originalData = $data['reunio_data#1'] ?? '';
-                    $originalAgents = $data['reunio_agents#1'] ?? '';
-                    $originalTemes = $data['reunio_temes#1'] ?? '';
-                    $originalAcords = $data['reunio_acords#1'] ?? '';
-
-                    Log::info("Datos originales para la primera fila guardados");
-
-                    // Ahora, en lugar de usar cloneRow, añadiremos filas a la tabla manualmente
-                    // usando variables temporales con nombres sin números (para evitar el problema #1#1)
-
-                    // Para la primera fila, usamos los datos directamente
-                    $templateProcessor->setValue('reunio_data#1', $originalData);
-                    $templateProcessor->setValue('reunio_agents#1', $originalAgents);
-                    $templateProcessor->setValue('reunio_temes#1', $originalTemes);
-                    $templateProcessor->setValue('reunio_acords#1', $originalAcords);
-
-                    Log::info("Primera fila procesada correctamente");
-
-                    // Si hay más de una fila, necesitamos un enfoque diferente
-                    if ($reunionesCount > 1) {
-                        // Usamos el método cloneRow, pero DESPUÉS tendremos que corregir los nombres de las variables
-                        if (method_exists($templateProcessor, 'cloneRow')) {
-                            // Intentar clonar la fila (esto generará variables con #1#2, #1#3, etc.)
-                            $templateProcessor->cloneRow('reunio_data#1', $reunionesCount - 1);
-                            Log::info("Filas clonadas: " . ($reunionesCount - 1));
-
-                            // Ahora necesitamos corregir las variables generadas
-                            for ($i = 2; $i <= $reunionesCount; $i++) {
-                                // Las variables generadas tendrán el formato #1#X donde X es la posición
-                                $generatedSuffix = '#1#' . ($i - 1); // PhpWord numera desde 1 las filas clonadas
-
-                                // Reemplazamos estas variables con los datos correctos
-                                $templateProcessor->setValue('reunio_data' . $generatedSuffix, $data['reunio_data#' . $i] ?? '');
-                                $templateProcessor->setValue('reunio_agents' . $generatedSuffix, $data['reunio_agents#' . $i] ?? '');
-                                $templateProcessor->setValue('reunio_temes' . $generatedSuffix, $data['reunio_temes#' . $i] ?? '');
-                                $templateProcessor->setValue('reunio_acords' . $generatedSuffix, $data['reunio_acords#' . $i] ?? '');
-
-                                Log::info("Corrección aplicada para fila $i con sufijo $generatedSuffix");
-                            }
-
-                            Log::info("Todas las filas procesadas correctamente");
-                        } else {
-                            // Si cloneRow no está disponible, informamos del problema
-                            Log::warning("El método cloneRow no está disponible. No se pueden añadir filas adicionales.");
-                        }
-                    }
-                } catch (\Exception $e) {
-                    Log::warning("Error al clonar filas de la tabla: " . $e->getMessage());
-                    // En caso de error, simplemente mostramos la primera fila si tenemos datos
-                    $this->replaceFirstRowOnly($templateProcessor, $data);
-                }
-            } else {
-                // Si no hay datos, simplemente limpiamos la primera fila
-                $this->clearFirstRow($templateProcessor);
-            }
-        } catch (\Exception $e) {
-            Log::error("Error general al procesar la tabla de reuniones: " . $e->getMessage());
-            // En caso de error, simplemente mostramos la primera fila si tenemos datos
-            $this->replaceFirstRowOnly($templateProcessor, $data);
-        }
-    }
-
-    /**
-     * Reemplaza solo la primera fila de la tabla con datos
-     */
-    private function replaceFirstRowOnly($templateProcessor, $data)
-    {
-        Log::info("Reemplazando solo la primera fila con datos disponibles");
-
-        try {
-            // Reemplazar solo la primera fila
-            $templateProcessor->setValue('reunio_data#1', $data['reunio_data#1'] ?? '');
-            $templateProcessor->setValue('reunio_agents#1', $data['reunio_agents#1'] ?? '');
-            $templateProcessor->setValue('reunio_temes#1', $data['reunio_temes#1'] ?? '');
-            $templateProcessor->setValue('reunio_acords#1', $data['reunio_acords#1'] ?? '');
-
-            Log::info("Primera fila reemplazada correctamente");
-        } catch (\Exception $e) {
-            Log::warning("Error al reemplazar la primera fila: " . $e->getMessage());
-        }
-    }
-
-    /**
-     * Limpia la primera fila de la tabla
-     */
-    private function clearFirstRow($templateProcessor)
-    {
-        Log::info("Limpiando la primera fila de la tabla (no hay datos)");
-
-        try {
-            $templateProcessor->setValue('reunio_data#1', '');
-            $templateProcessor->setValue('reunio_agents#1', '');
-            $templateProcessor->setValue('reunio_temes#1', '');
-            $templateProcessor->setValue('reunio_acords#1', '');
-
-            Log::info("Primera fila limpiada correctamente");
-        } catch (\Exception $e) {
-            Log::warning("Error al limpiar la primera fila: " . $e->getMessage());
-        }
-    }
-
-    /**
-     * Reemplaza las variables individuales de reuniones en el documento Word
-     */
-    private function replaceReunionesVariables($templateProcessor, $data)
-    {
-        Log::info("Reemplazando variables individuales de reuniones");
-
-        try {
-            // Reemplazar variables individuales para cada fila
-            for ($i = 1; $i <= 10; $i++) { // Limitamos a 10 filas por seguridad
-                $templateProcessor->setValue('reunio_data#' . $i, $data['reunio_data#' . $i] ?? '');
-                $templateProcessor->setValue('reunio_agents#' . $i, $data['reunio_agents#' . $i] ?? '');
-                $templateProcessor->setValue('reunio_temes#' . $i, $data['reunio_temes#' . $i] ?? '');
-                $templateProcessor->setValue('reunio_acords#' . $i, $data['reunio_acords#' . $i] ?? '');
-            }
-        } catch (\Exception $e) {
-            Log::warning("Error al reemplazar variables individuales de reuniones: " . $e->getMessage());
-        }
-    }
-
-    /**
      * Descargar el documento Word generado
      */
     public function download($filename)
@@ -944,3 +824,4 @@ class ExcelWordController extends Controller
         return response()->download($path, $filename, $headers);
     }
 }
+

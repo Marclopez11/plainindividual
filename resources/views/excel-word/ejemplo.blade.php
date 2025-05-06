@@ -400,53 +400,6 @@
                                         <span class="ml-2 text-xs text-indigo-600">(${saber#1} hasta ${saber#18})</span>
                                     </td>
                                 </tr>
-                                <!-- Nueva sección para tabla de reuniones de seguimiento -->
-                                <tr>
-                                    <td colspan="2" class="px-6 py-2 bg-gray-100 font-medium text-gray-900">
-                                        TABLA DE REUNIONES DE SEGUIMIENTO (HOJA "DESENVOLUPAMENT")
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                        B5:E[n]
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Tabla dinámica de reuniones (se adapta al número de filas)
-                                        <span class="ml-2 text-xs text-indigo-600">(${reunio_data#1}, ${reunio_agents#1}, ${reunio_temes#1}, ${reunio_acords#1}, etc.)</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                        B5:B[n]
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Fecha de la reunión (Data)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                        C5:C[n]
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Participantes (Agents participants)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                        D5:D[n]
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Temas tratados (Temes tractats)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                        E5:E[n]
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Acuerdos (Acords)
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -456,39 +409,6 @@
                     <h4 class="text-sm font-medium text-blue-700 mb-2">{{ __('Nota') }}</h4>
                     <p class="text-sm text-blue-600">
                         {{ __('Para obtener mejores resultados, asegúrate de que tu archivo Excel contenga los datos en las celdas exactamente como se muestra arriba. El sistema extraerá la información de estas celdas específicas.') }}
-                    </p>
-                </div>
-
-                <div class="bg-indigo-50 p-4 rounded-md mb-6">
-                    <h4 class="text-sm font-medium text-indigo-700 mb-2">{{ __('Guía para tablas dinámicas en Word') }}</h4>
-                    <p class="text-sm text-indigo-600 mb-2">
-                        {{ __('Para que la tabla de reuniones de seguimiento funcione correctamente, debes preparar tu plantilla Word de esta manera:') }}
-                    </p>
-                    <ul class="list-disc list-inside text-sm text-indigo-600 space-y-1 ml-4">
-                        <li>{{ __('En la tabla de "REUNIONS DE SEGUIMENT I ACORDS AMB L\'ALUMNE/A, EL PARE, LA MARE O EL TUTOR O TUTORA LEGAL"') }}</li>
-                        <li>{{ __('Debes colocar los marcadores exactamente así:') }}</li>
-                    </ul>
-                    <div class="bg-indigo-100 p-3 mt-2 rounded text-xs overflow-x-auto">
-                        <table class="border-collapse border border-indigo-300 w-full">
-                            <tr class="bg-indigo-200">
-                                <th class="border border-indigo-300 p-1">Data</th>
-                                <th class="border border-indigo-300 p-1">Agents participants</th>
-                                <th class="border border-indigo-300 p-1">Temes tractats</th>
-                                <th class="border border-indigo-300 p-1">Acords</th>
-                            </tr>
-                            <tr>
-                                <td class="border border-indigo-300 p-1">${reunio_data#1}</td>
-                                <td class="border border-indigo-300 p-1">${reunio_agents#1}</td>
-                                <td class="border border-indigo-300 p-1">${reunio_temes#1}</td>
-                                <td class="border border-indigo-300 p-1">${reunio_acords#1}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <p class="text-sm text-indigo-600 mt-3">
-                        {{ __('IMPORTANTE: Los marcadores deben ser exactamente como se muestra, incluyendo el símbolo # y el número 1.') }}
-                    </p>
-                    <p class="text-sm text-indigo-600 mt-2">
-                        {{ __('No necesitas crear más filas. El sistema duplicará automáticamente esta fila según las entradas que encuentre en el Excel.') }}
                     </p>
                 </div>
 
