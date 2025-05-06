@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupportPlanController;
 use App\Http\Controllers\TimetableController;
+use App\Http\Controllers\ExcelWordController;
 
 // Redirect root to support plans index
 Route::get('/', function () {
@@ -41,4 +42,14 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+// Rutas para Excel a Word
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+    Route::get('/excel-word', [ExcelWordController::class, 'index'])->name('excel-word.index');
+    Route::post('/excel-word/process', [ExcelWordController::class, 'process'])->name('excel-word.process');
+    Route::get('/excel-word/download/{filename}', [ExcelWordController::class, 'download'])->name('excel-word.download');
+    Route::get('/excel-word/ejemplo', function () {
+        return view('excel-word.ejemplo');
+    })->name('excel-word.ejemplo');
 });
