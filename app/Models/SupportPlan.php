@@ -61,6 +61,9 @@ class SupportPlan extends Model
         'team_id',
         'user_id',
         'professionals',
+        'reunion_familia',
+        'reunion_professionals',
+        'acords'
     ];
 
     /**
@@ -85,6 +88,9 @@ class SupportPlan extends Model
         'bloc_sabers' => 'array',
         'saber' => 'array',
         'professionals' => 'array',
+        'reunion_familia' => 'array',
+        'reunion_professionals' => 'array',
+        'acords' => 'array'
     ];
 
     /**

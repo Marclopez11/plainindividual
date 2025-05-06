@@ -606,10 +606,10 @@
                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                 </svg>
                                                 @endif
-                        </div>
-                        </div>
+                                            </div>
+                                        </div>
                                         <span>Altres professionals (educador/a, tècnic/a d'integració social (TIS), monitors per a l'educació inclusiva a l'escola...):</span>
-                    </div>
+                                    </div>
 
                                     <div class="flex items-start">
                                         <div class="relative flex items-center mt-1 mr-2">
@@ -622,7 +622,7 @@
                                             </div>
                                         </div>
                                         <span>Equip d'assessorament psicopedagògic (EAP) / treballador/a social:</span>
-                    </div>
+                                    </div>
 
                                     <div class="flex items-start">
                                         <div class="relative flex items-center mt-1 mr-2">
@@ -635,7 +635,7 @@
                                             </div>
                                         </div>
                                         <span>Serveis socials:</span>
-                        </div>
+                                    </div>
 
                                     <div class="flex items-start">
                                         <div class="relative flex items-center mt-1 mr-2">
@@ -645,10 +645,10 @@
                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                 </svg>
                                                 @endif
-                        </div>
+                                            </div>
                                         </div>
                                         <span>Centre de salut mental infantil i juvenil (CSMIJ):</span>
-                    </div>
+                                    </div>
 
                                     <div class="flex items-start">
                                         <div class="relative flex items-center mt-1 mr-2">
@@ -661,7 +661,7 @@
                                             </div>
                                         </div>
                                         <span>Centre de recursos educatius per a deficients auditius (CREDA), centre de recursos educatius per a deficients visuals (CREDV), centres d'educació especial com a centres proveïdors de serveis i recursos (CEEPSIR), fisioterapeuta...:</span>
-                        </div>
+                                    </div>
 
                                     <div class="flex items-start">
                                         <div class="relative flex items-center mt-1 mr-2">
@@ -671,10 +671,10 @@
                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                 </svg>
                                                 @endif
-                        </div>
+                                            </div>
                                         </div>
                                         <span>Suports externs (centres de psicopedagogia, reforç escolar, activitats del pla educatiu d'entorn...):</span>
-                    </div>
+                                    </div>
 
                                     <div class="flex items-start">
                                         <div class="relative flex items-center mt-1 mr-2">
@@ -687,7 +687,7 @@
                                             </div>
                                         </div>
                                         <span>Activitats extraescolars:</span>
-                        </div>
+                                    </div>
 
                                     <div class="flex items-start">
                                         <div class="relative flex items-center mt-1 mr-2">
@@ -697,10 +697,10 @@
                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                 </svg>
                                                 @endif
-                        </div>
+                                            </div>
                                         </div>
                                         <span>Beques/Ajuts:</span>
-                    </div>
+                                    </div>
 
                                     <div class="flex items-start">
                                         <div class="relative flex items-center mt-1 mr-2">
@@ -713,8 +713,8 @@
                                             </div>
                                         </div>
                                         <label class="text-md mr-4">{{ __('Altres serveis') }}</label>
-                            </div>
-                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </table>
@@ -738,6 +738,116 @@
                             </td>
                         </tr>
                     </table>
+
+                    <!-- REUNIONS DE SEGUIMENT -->
+                    <div class="space-y-8 mt-8">
+                        <!-- REUNIONS DE SEGUIMENT I ACORDS AMB L'ALUMNE/A -->
+                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="4" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    REUNIONS DE SEGUIMENT I ACORDS AMB L'ALUMNE/A, EL PARE, LA MARE O EL TUTOR O TUTORA LEGAL
+                                </td>
+                            </tr>
+                            <tr class="bg-blue-100">
+                                <td class="p-2 font-bold border border-gray-800" style="width: 15%;">Data</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 25%;">Agents participants</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Temes tractats</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Acords</td>
+                            </tr>
+                            <tbody>
+                                @if(isset($supportPlan->reunion_familia) && is_array($supportPlan->reunion_familia))
+                                    @foreach($supportPlan->reunion_familia as $reunio)
+                                        <tr>
+                                            <td class="p-2 border border-gray-800">{{ $reunio['data'] ?? '' }}</td>
+                                            <td class="p-2 border border-gray-800">{{ $reunio['agents'] ?? '' }}</td>
+                                            <td class="p-2 border border-gray-800">{{ $reunio['temes'] ?? '' }}</td>
+                                            <td class="p-2 border border-gray-800">{{ $reunio['acords'] ?? '' }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="4" class="p-2 border border-gray-800 text-center text-gray-500">
+                                            No s'han registrat reunions amb la família
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+
+                        <!-- REUNIONS DE SEGUIMENT AMB ELS PROFESSIONALS -->
+                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="4" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    REUNIONS DE SEGUIMENT AMB ELS PROFESSIONALS
+                                </td>
+                            </tr>
+                            <tr class="bg-blue-100">
+                                <td class="p-2 font-bold border border-gray-800" style="width: 15%;">Data</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 25%;">Agents participants</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Temes tractats</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Acords</td>
+                            </tr>
+                            <tbody>
+                                @if(isset($supportPlan->reunion_professionals) && is_array($supportPlan->reunion_professionals))
+                                    @foreach($supportPlan->reunion_professionals as $reunio)
+                                        <tr>
+                                            <td class="p-2 border border-gray-800">{{ $reunio['data'] ?? '' }}</td>
+                                            <td class="p-2 border border-gray-800">{{ $reunio['agents'] ?? '' }}</td>
+                                            <td class="p-2 border border-gray-800">{{ $reunio['temes'] ?? '' }}</td>
+                                            <td class="p-2 border border-gray-800">{{ $reunio['acords'] ?? '' }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="4" class="p-2 border border-gray-800 text-center text-gray-500">
+                                            No s'han registrat reunions amb professionals
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+
+                        <!-- ACORDS SOBRE LA CONTINUÏTAT -->
+                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="4" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    ACORDS SOBRE LA CONTINUÏTAT DEL PLA DE SUPORT INDIVIDUALITZAT
+                                </td>
+                            </tr>
+                            <tr class="bg-blue-100">
+                                <td class="p-2 font-bold border border-gray-800" style="width: 15%;">Data</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 25%;">Agents participants</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Acord</td>
+                                <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Observacions</td>
+                            </tr>
+                            <tbody>
+                                @if(isset($supportPlan->acords) && is_array($supportPlan->acords))
+                                    @foreach($supportPlan->acords as $acord)
+                                        <tr>
+                                            <td class="p-2 border border-gray-800">{{ $acord['data'] ?? '' }}</td>
+                                            <td class="p-2 border border-gray-800">{{ $acord['agents'] ?? '' }}</td>
+                                            <td class="p-2 border border-gray-800">
+                                                @if(isset($acord['tipus']) && is_array($acord['tipus']))
+                                                    <ul class="list-disc list-inside">
+                                                        @foreach($acord['tipus'] as $tipus)
+                                                            <li>{{ ucfirst($tipus) }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                @endif
+                                            </td>
+                                            <td class="p-2 border border-gray-800">{{ $acord['observacions'] ?? '' }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="4" class="p-2 border border-gray-800 text-center text-gray-500">
+                                            No s'han registrat acords sobre la continuïtat
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <!-- Excel Format (Hidden by default) -->

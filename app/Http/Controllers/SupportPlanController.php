@@ -127,6 +127,36 @@ class SupportPlanController extends Controller
             'professionals' => 'nullable|array',
             'timetable_data' => 'nullable|string',
             'timetable_name' => 'nullable|string|max:255',
+            
+            // Reuniones con familia
+            'reunion_familia_data' => 'nullable|array',
+            'reunion_familia_data.*' => 'nullable|date',
+            'reunion_familia_agents' => 'nullable|array',
+            'reunion_familia_agents.*' => 'nullable|string',
+            'reunion_familia_temes' => 'nullable|array',
+            'reunion_familia_temes.*' => 'nullable|string',
+            'reunion_familia_acords' => 'nullable|array',
+            'reunion_familia_acords.*' => 'nullable|string',
+            
+            // Reuniones con profesionales
+            'reunion_professionals_data' => 'nullable|array',
+            'reunion_professionals_data.*' => 'nullable|date',
+            'reunion_professionals_agents' => 'nullable|array',
+            'reunion_professionals_agents.*' => 'nullable|string',
+            'reunion_professionals_temes' => 'nullable|array',
+            'reunion_professionals_temes.*' => 'nullable|string',
+            'reunion_professionals_acords' => 'nullable|array',
+            'reunion_professionals_acords.*' => 'nullable|string',
+            
+            // Acuerdos
+            'acords_data' => 'nullable|array',
+            'acords_data.*' => 'nullable|date',
+            'acords_agents' => 'nullable|array',
+            'acords_agents.*' => 'nullable|string',
+            'acords_tipus' => 'nullable|array',
+            'acords_tipus.*' => 'nullable|array',
+            'acords_observacions' => 'nullable|array',
+            'acords_observacions.*' => 'nullable|string',
         ]);
 
         $user = Auth::user();
@@ -141,6 +171,49 @@ class SupportPlanController extends Controller
 
         // Add user_id to the validated data
         $validated['user_id'] = $user->id;
+
+        // Procesar reuniones con familia
+        $reunionsFamilia = [];
+        if ($request->has('reunion_familia_data')) {
+            foreach ($request->reunion_familia_data as $index => $data) {
+                $reunionsFamilia[] = [
+                    'data' => $data,
+                    'agents' => $request->reunion_familia_agents[$index] ?? '',
+                    'temes' => $request->reunion_familia_temes[$index] ?? '',
+                    'acords' => $request->reunion_familia_acords[$index] ?? '',
+                ];
+            }
+        }
+        $validated['reunion_familia'] = $reunionsFamilia;
+
+        // Procesar reuniones con profesionales
+        $reunionsProfessionals = [];
+        if ($request->has('reunion_professionals_data')) {
+            foreach ($request->reunion_professionals_data as $index => $data) {
+                $reunionsProfessionals[] = [
+                    'data' => $data,
+                    'agents' => $request->reunion_professionals_agents[$index] ?? '',
+                    'temes' => $request->reunion_professionals_temes[$index] ?? '',
+                    'acords' => $request->reunion_professionals_acords[$index] ?? '',
+                ];
+            }
+        }
+        $validated['reunion_professionals'] = $reunionsProfessionals;
+
+        // Procesar acuerdos
+        $acords = [];
+        if ($request->has('acords_data')) {
+            foreach ($request->acords_data as $index => $data) {
+                $tipus = $request->input("acords_tipus_{$index}", []);
+                $acords[] = [
+                    'data' => $data,
+                    'agents' => $request->acords_agents[$index] ?? '',
+                    'tipus' => $tipus,
+                    'observacions' => $request->acords_observacions[$index] ?? '',
+                ];
+            }
+        }
+        $validated['acords'] = $acords;
 
         $supportPlan = SupportPlan::create($validated);
 
@@ -171,6 +244,8 @@ class SupportPlanController extends Controller
                 }
             }
         }
+
+        $supportPlan->save();
 
         return redirect()->route('support-plans.show', $supportPlan->id)
             ->with('success', 'Plan de soporte creado correctamente.');
@@ -225,6 +300,7 @@ class SupportPlanController extends Controller
             abort(403, 'No tienes permiso para actualizar este plan de soporte.');
         }
 
+        // Validar los datos
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'student_name' => 'required|string|max:255',
@@ -283,7 +359,52 @@ class SupportPlanController extends Controller
             }
         }
 
-        $supportPlan->update($validated);
+        // Procesar reuniones con familia
+        $reunionsFamilia = [];
+        if ($request->has('reunion_familia_data')) {
+            foreach ($request->reunion_familia_data as $index => $data) {
+                $reunionsFamilia[] = [
+                    'data' => $data,
+                    'agents' => $request->reunion_familia_agents[$index] ?? '',
+                    'temes' => $request->reunion_familia_temes[$index] ?? '',
+                    'acords' => $request->reunion_familia_acords[$index] ?? '',
+                ];
+            }
+        }
+
+        // Procesar reuniones con profesionales
+        $reunionsProfessionals = [];
+        if ($request->has('reunion_professionals_data')) {
+            foreach ($request->reunion_professionals_data as $index => $data) {
+                $reunionsProfessionals[] = [
+                    'data' => $data,
+                    'agents' => $request->reunion_professionals_agents[$index] ?? '',
+                    'temes' => $request->reunion_professionals_temes[$index] ?? '',
+                    'acords' => $request->reunion_professionals_acords[$index] ?? '',
+                ];
+            }
+        }
+
+        // Procesar acuerdos
+        $acords = [];
+        if ($request->has('acords_data')) {
+            foreach ($request->acords_data as $index => $data) {
+                $tipus = $request->input("acords_tipus_{$index}", []);
+                $acords[] = [
+                    'data' => $data,
+                    'agents' => $request->acords_agents[$index] ?? '',
+                    'tipus' => $tipus,
+                    'observacions' => $request->acords_observacions[$index] ?? '',
+                ];
+            }
+        }
+
+        // Actualizar el plan de soporte con todos los datos
+        $supportPlan->update(array_merge($validated, [
+            'reunion_familia' => $reunionsFamilia,
+            'reunion_professionals' => $reunionsProfessionals,
+            'acords' => $acords
+        ]));
 
         // Handle timetable data if present
         if (!empty($request->timetable_data)) {
@@ -295,35 +416,13 @@ class SupportPlanController extends Controller
 
                 if (!$timetable) {
                     $timetable = $supportPlan->timetables()->create([
-                        'name' => $request->timetable_name ?? 'Horari Escolar',
-                        'configuration' => [
-                            'timeSlots' => $timetableData['timeSlots'] ?? [],
-                            'slots' => $timetableData['slots'] ?? []
-                        ]
+                        'name' => $request->timetable_name ?? 'Horario',
+                        'data' => $timetableData
                     ]);
                 } else {
-                    // Update existing timetable
                     $timetable->update([
-                        'name' => $request->timetable_name ?? 'Horari Escolar',
-                        'configuration' => [
-                            'timeSlots' => $timetableData['timeSlots'] ?? [],
-                            'slots' => $timetableData['slots'] ?? []
-                        ]
-                    ]);
-
-                    // Delete existing slots
-                    $timetable->slots()->delete();
-                }
-
-                // Create slots
-                foreach ($timetableData['formattedSlots'] as $slotData) {
-                    $timetable->slots()->create([
-                        'day' => $slotData['day'],
-                        'time_start' => $slotData['time_start'],
-                        'time_end' => $slotData['time_end'],
-                        'subject' => $slotData['subject'],
-                        'type' => $slotData['type'] ?? 'regular',
-                        'notes' => $slotData['notes'] ?? null
+                        'name' => $request->timetable_name ?? $timetable->name,
+                        'data' => $timetableData
                     ]);
                 }
             }
@@ -548,8 +647,8 @@ class SupportPlanController extends Controller
             $tableOnlyXml = $matches[0];
 
             // Preparar variables para la plantilla
-            $variables = $this->prepareTemplateVariables($supportPlan);
-            $variables = array_merge($variables, $this->prepareSaberVariables($supportPlan));
+                    $variables = $this->prepareTemplateVariables($supportPlan);
+                    $variables = array_merge($variables, $this->prepareSaberVariables($supportPlan));
 
             // Crear una copia temporal de la plantilla
             $tempFile = tempnam(sys_get_temp_dir(), 'docx_');
@@ -671,23 +770,45 @@ class SupportPlanController extends Controller
             'professional_beques_ajuts' => in_array('beques_ajuts', $supportPlan->professionals ?? []) ? '☒' : '☐',
             'professional_altres_serveis' => in_array('altres_serveis', $supportPlan->professionals ?? []) ? '☒' : '☐',
 
-            'horari_escolar' => $this->generateTimetableHtml($supportPlan->timetables()->first())
+            'horari_escolar' => $this->generateTimetableHtml($supportPlan->timetables()->first()),
+
+            // Reuniones de seguimiento con familia
+            'reunion_familia_data_1' => $supportPlan->reunion_familia_data_1 ?? '',
+            'reunion_familia_agents_1' => $supportPlan->reunion_familia_agents_1 ?? '',
+            'reunion_familia_temes_1' => $supportPlan->reunion_familia_temes_1 ?? '',
+            'reunion_familia_acords_1' => $supportPlan->reunion_familia_acords_1 ?? '',
+            
+            // Reuniones de seguimiento con profesionales
+            'reunion_professionals_data_1' => $supportPlan->reunion_professionals_data_1 ?? '',
+            'reunion_professionals_agents_1' => $supportPlan->reunion_professionals_agents_1 ?? '',
+            'reunion_professionals_temes_1' => $supportPlan->reunion_professionals_temes_1 ?? '',
+            'reunion_professionals_acords_1' => $supportPlan->reunion_professionals_acords_1 ?? '',
+            
+            // Acuerdos sobre continuidad
+            'acords_data_1' => $supportPlan->acords_data_1 ?? '',
+            'acords_agents_1' => $supportPlan->acords_agents_1 ?? '',
+            'acords_acord_1' => $supportPlan->acords_acord_1 ?? '',
+            'acords_observacions_1' => $supportPlan->acords_observacions_1 ?? '',
+            'acords_continuitat_1' => in_array('continuitat', $supportPlan->acords_tipus_1 ?? []) ? '☒' : '☐',
+            'acords_revisio_1' => in_array('revisio', $supportPlan->acords_tipus_1 ?? []) ? '☒' : '☐',
+            'acords_finalitzacio_1' => in_array('finalitzacio', $supportPlan->acords_tipus_1 ?? []) ? '☒' : '☐',
+
+            // Generar tabla de reuniones con familia
+            'reunions_familia_table' => $this->generateReunionsTable($supportPlan->reunion_familia),
+            'reunions_professionals_table' => $this->generateReunionsTable($supportPlan->reunion_professionals),
+            'acords_table' => $this->generateAcordsTable($supportPlan->acords),
         ];
 
-        // Añadir objetivos y criterios regulares (hasta 22)
-        $learningObjectives = $supportPlan->learning_objectives ?? [];
-        $evaluationCriteria = $supportPlan->evaluation_criteria ?? [];
+        // Generar variables dinámicas para objetivos y criterios
         for ($i = 1; $i <= 22; $i++) {
-            $variables['objetivo#' . $i] = isset($learningObjectives[$i-1]) ? trim($learningObjectives[$i-1]) : '';
-            $variables['criterio#' . $i] = isset($evaluationCriteria[$i-1]) ? trim($evaluationCriteria[$i-1]) : '';
+            $variables["objetivo#$i"] = $supportPlan->{"objetivo_$i"} ?? '';
+            $variables["criterio#$i"] = $supportPlan->{"criterio_$i"} ?? '';
         }
 
-        // Añadir objetivos y criterios transversales (hasta 14)
-        $transversalObjectives = $supportPlan->transversal_objectives ?? [];
-        $transversalCriteria = $supportPlan->transversal_criteria ?? [];
+        // Generar variables dinámicas para objetivos y criterios transversales
         for ($i = 1; $i <= 14; $i++) {
-            $variables['transversal_objective#' . $i] = isset($transversalObjectives[$i-1]) ? trim($transversalObjectives[$i-1]) : '';
-            $variables['transversal_criteria#' . $i] = isset($transversalCriteria[$i-1]) ? trim($transversalCriteria[$i-1]) : '';
+            $variables["transversal_objective#$i"] = $supportPlan->{"transversal_objective_$i"} ?? '';
+            $variables["transversal_criteria#$i"] = $supportPlan->{"transversal_criteria_$i"} ?? '';
         }
 
         return $variables;
@@ -1030,5 +1151,218 @@ class SupportPlanController extends Controller
         $html .= '</w:tbl>';
 
         return $html;
+    }
+
+    /**
+     * Genera el HTML para la tabla de reuniones
+     */
+    private function generateReunionsTable($reunions)
+    {
+        if (empty($reunions) || !is_array($reunions)) {
+            return '';
+        }
+
+        $table = '<w:tbl>
+            <w:tblPr>
+                <w:tblStyle w:val="TableGrid"/>
+                <w:tblW w:w="10000" w:type="dxa"/>
+                <w:tblBorders>
+                    <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:insideH w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:insideV w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                </w:tblBorders>
+                <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
+            </w:tblPr>
+            <w:tblGrid>
+                <w:gridCol w:w="1500"/>
+                <w:gridCol w:w="2500"/>
+                <w:gridCol w:w="3000"/>
+                <w:gridCol w:w="3000"/>
+            </w:tblGrid>';
+
+        // Header row
+        $table .= '<w:tr>
+            <w:tc>
+                <w:tcPr>
+                    <w:shd w:fill="6AB0E6" w:val="clear"/>
+                </w:tcPr>
+                <w:p>
+                    <w:pPr><w:jc w:val="center"/></w:pPr>
+                    <w:r><w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr><w:t>Data</w:t></w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>
+                <w:tcPr>
+                    <w:shd w:fill="6AB0E6" w:val="clear"/>
+                </w:tcPr>
+                <w:p>
+                    <w:pPr><w:jc w:val="center"/></w:pPr>
+                    <w:r><w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr><w:t>Agents participants</w:t></w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>
+                <w:tcPr>
+                    <w:shd w:fill="6AB0E6" w:val="clear"/>
+                </w:tcPr>
+                <w:p>
+                    <w:pPr><w:jc w:val="center"/></w:pPr>
+                    <w:r><w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr><w:t>Temes tractats</w:t></w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>
+                <w:tcPr>
+                    <w:shd w:fill="6AB0E6" w:val="clear"/>
+                </w:tcPr>
+                <w:p>
+                    <w:pPr><w:jc w:val="center"/></w:pPr>
+                    <w:r><w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr><w:t>Acords</w:t></w:r>
+                </w:p>
+            </w:tc>
+        </w:tr>';
+
+        // Data rows
+        foreach ($reunions as $reunio) {
+            $table .= '<w:tr>
+                <w:tc>
+                    <w:p>
+                        <w:pPr><w:jc w:val="center"/></w:pPr>
+                        <w:r><w:t>' . htmlspecialchars($reunio['data'] ?? '', ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:p>
+                        <w:pPr><w:jc w:val="left"/></w:pPr>
+                        <w:r><w:t>' . htmlspecialchars($reunio['agents'] ?? '', ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:p>
+                        <w:pPr><w:jc w:val="left"/></w:pPr>
+                        <w:r><w:t>' . htmlspecialchars($reunio['temes'] ?? '', ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:p>
+                        <w:pPr><w:jc w:val="left"/></w:pPr>
+                        <w:r><w:t>' . htmlspecialchars($reunio['acords'] ?? '', ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>
+            </w:tr>';
+        }
+
+        $table .= '</w:tbl>';
+        return $table;
+    }
+
+    /**
+     * Genera el HTML para la tabla de acuerdos
+     */
+    private function generateAcordsTable($acords)
+    {
+        if (empty($acords) || !is_array($acords)) {
+            return '';
+        }
+
+        $table = '<w:tbl>
+            <w:tblPr>
+                <w:tblStyle w:val="TableGrid"/>
+                <w:tblW w:w="10000" w:type="dxa"/>
+                <w:tblBorders>
+                    <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:insideH w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                    <w:insideV w:val="single" w:sz="4" w:space="0" w:color="000000"/>
+                </w:tblBorders>
+                <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
+            </w:tblPr>
+            <w:tblGrid>
+                <w:gridCol w:w="1500"/>
+                <w:gridCol w:w="2500"/>
+                <w:gridCol w:w="3000"/>
+                <w:gridCol w:w="3000"/>
+            </w:tblGrid>';
+
+        // Header row
+        $table .= '<w:tr>
+            <w:tc>
+                <w:tcPr>
+                    <w:shd w:fill="6AB0E6" w:val="clear"/>
+                </w:tcPr>
+                <w:p>
+                    <w:pPr><w:jc w:val="center"/></w:pPr>
+                    <w:r><w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr><w:t>Data</w:t></w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>
+                <w:tcPr>
+                    <w:shd w:fill="6AB0E6" w:val="clear"/>
+                </w:tcPr>
+                <w:p>
+                    <w:pPr><w:jc w:val="center"/></w:pPr>
+                    <w:r><w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr><w:t>Agents participants</w:t></w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>
+                <w:tcPr>
+                    <w:shd w:fill="6AB0E6" w:val="clear"/>
+                </w:tcPr>
+                <w:p>
+                    <w:pPr><w:jc w:val="center"/></w:pPr>
+                    <w:r><w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr><w:t>Acord</w:t></w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>
+                <w:tcPr>
+                    <w:shd w:fill="6AB0E6" w:val="clear"/>
+                </w:tcPr>
+                <w:p>
+                    <w:pPr><w:jc w:val="center"/></w:pPr>
+                    <w:r><w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr><w:t>Observacions</w:t></w:r>
+                </w:p>
+            </w:tc>
+        </w:tr>';
+
+        // Data rows
+        foreach ($acords as $acord) {
+            $tipus = '';
+            if (isset($acord['tipus']) && is_array($acord['tipus'])) {
+                $tipus = implode(', ', array_map('ucfirst', $acord['tipus']));
+            }
+
+            $table .= '<w:tr>
+                <w:tc>
+                    <w:p>
+                        <w:pPr><w:jc w:val="center"/></w:pPr>
+                        <w:r><w:t>' . htmlspecialchars($acord['data'] ?? '', ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:p>
+                        <w:pPr><w:jc w:val="left"/></w:pPr>
+                        <w:r><w:t>' . htmlspecialchars($acord['agents'] ?? '', ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:p>
+                        <w:pPr><w:jc w:val="left"/></w:pPr>
+                        <w:r><w:t>' . htmlspecialchars($tipus, ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:p>
+                        <w:pPr><w:jc w:val="left"/></w:pPr>
+                        <w:r><w:t>' . htmlspecialchars($acord['observacions'] ?? '', ENT_XML1, 'UTF-8') . '</w:t></w:r>
+                    </w:p>
+                </w:tc>
+            </w:tr>';
+        }
+
+        $table .= '</w:tbl>';
+        return $table;
     }
 }

@@ -319,7 +319,6 @@
                                                     value="{{ old('justification_other', $supportPlan->justification_other ?? '') }}">
                                 </div>
                             </div>
-                        </div>
                                 </td>
                             </tr>
                             <tr>
@@ -389,17 +388,91 @@
                             </tr>
                         </table>
 
-                        <!-- ÀREES, BLOC DE SABERS I SABERS -->
+                        <!-- CONCRECIÓ DE LES COMPETÈNCIES TRANSVERSALS DEL PSI -->
                         <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
                             <tr>
-                                <td colspan="3" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                <td colspan="2" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    CONCRECIÓ DE LES COMPETÈNCIES TRANSVERSALS DEL PSI
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
+                                    <div class="flex items-center">
+                                        <span class="font-bold mr-1">Objectiu d'aprenentatge</span>
+                                        <span class="text-sm text-gray-500">(7)</span>
+                                    </div>
+                                    <div class="text-sm mb-2">Què volem que aprengui l'alumnat i per a què?</div>
+                                    <div class="text-sm mb-2">CAPACITAT + SABER + FINALITAT</div>
+                                </td>
+                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
+                                    <div class="flex items-center">
+                                        <span class="font-bold mr-1">Criteri d'avaluació</span>
+                                        <span class="text-sm text-gray-500">(8)</span>
+                                    </div>
+                                    <div class="text-sm mb-2">Com sabem que ho ha après?</div>
+                                    <div class="text-sm mb-2">ACCIÓ + SABER + CONTEXT</div>
+                                </td>
+                            </tr>
+                            <tbody id="transversal-container">
+                                @php
+                                    $transversalObjectives = old('transversal_objectives', $supportPlan->transversal_objectives ?? []);
+                                    $transversalCriteria = old('transversal_criteria', $supportPlan->transversal_criteria ?? []);
+                                    
+                                    if (!is_array($transversalObjectives)) {
+                                        $transversalObjectives = [''];
+                                    }
+                                    if (!is_array($transversalCriteria)) {
+                                        $transversalCriteria = [''];
+                                    }
+                                    
+                                    $transversalRowCount = max(count($transversalObjectives), count($transversalCriteria));
+                                @endphp
+
+                                @for($i = 0; $i < $transversalRowCount; $i++)
+                                    <tr class="transversal-row">
+                                        <td class="p-2 border border-gray-800">
+                                            <div class="flex items-center gap-2">
+                                                <textarea name="transversal_objectives[]" rows="3" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $transversalObjectives[$i] ?? '' }}</textarea>
+                                            </div>
+                                        </td>
+                                        <td class="p-2 border border-gray-800">
+                                            <div class="flex items-center gap-2">
+                                                <textarea name="transversal_criteria[]" rows="3" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $transversalCriteria[$i] ?? '' }}</textarea>
+                                                <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                            <tr>
+                                <td colspan="2" class="p-2 border border-gray-800">
+                                    <button type="button" id="add-transversal-row" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Afegir més files
+                                    </button>
+                                    <span id="transversal-row-counter" class="ml-2 text-sm text-gray-500">{{ $transversalRowCount }}/10 files</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ÀREES, BLOC DE SABERS I SABERS -->
+                        <table id="sabers-table" class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="4" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
                                     ÀREES, BLOC DE SABERS I SABERS
                                 </td>
                             </tr>
                             <tr class="bg-blue-100">
                                 <td class="p-3 border border-gray-800 font-bold" style="width: 30%;">Àrea o Matèria</td>
                                 <td class="p-3 border border-gray-800 font-bold" style="width: 30%;">Bloc de sabers</td>
-                                <td class="p-3 border border-gray-800 font-bold" style="width: 40%;">Saber</td>
+                                <td class="p-3 border border-gray-800 font-bold" style="width: 35%;">Saber</td>
+                                <td class="p-3 border border-gray-800 font-bold" style="width: 5%;"></td>
                             </tr>
 
                             @php
@@ -407,22 +480,22 @@
                                 $blocSabers = old('bloc_sabers', $supportPlan->bloc_sabers ?? []);
                                 $saberItems = old('saber', $supportPlan->saber ?? []);
 
-                                // Ensure we have at least 2 rows (filled or empty)
-                                if (count($areaMateria) < 2) {
-                                    $areaMateria = array_pad($areaMateria, 2, '');
+                                if (empty($areaMateria)) {
+                                    $areaMateria = [''];
                                 }
-                                if (count($blocSabers) < 2) {
-                                    $blocSabers = array_pad($blocSabers, 2, '');
+                                if (empty($blocSabers)) {
+                                    $blocSabers = [''];
                                 }
-                                if (count($saberItems) < 2) {
-                                    $saberItems = array_pad($saberItems, 2, '');
+                                if (empty($saberItems)) {
+                                    $saberItems = [''];
                                 }
 
                                 $sabersRowCount = max(count($areaMateria), count($blocSabers), count($saberItems));
                             @endphp
 
+                            <tbody id="sabers-container">
                             @for ($i = 0; $i < $sabersRowCount; $i++)
-                                <tr>
+                                <tr class="saber-row">
                                     <td class="p-2 border border-gray-800">
                                         <input type="text" name="area_materia[]" value="{{ $areaMateria[$i] ?? '' }}" class="w-full px-2 py-1 border border-gray-300 rounded-md">
                                     </td>
@@ -432,14 +505,19 @@
                                     <td class="p-2 border border-gray-800">
                                         <textarea name="saber[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $saberItems[$i] ?? '' }}</textarea>
                                     </td>
+                                    <td class="p-2 border border-gray-800 text-center">
+                                        <button type="button" class="delete-row text-red-600 hover:text-red-800">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                    </td>
                                 </tr>
                             @endfor
+                            </tbody>
 
-                            <tr id="sabers-container">
-                                <!-- Aquí se insertarán nuevas filas mediante JavaScript -->
-                            </tr>
                             <tr>
-                                <td colspan="3" class="p-2 border border-gray-800">
+                                <td colspan="4" class="p-2 border border-gray-800">
                                     <button type="button" id="add-sabers-row" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -447,6 +525,81 @@
                                         Afegir més files
                                     </button>
                                     <span id="sabers-row-counter" class="ml-2 text-sm text-gray-500">{{ $sabersRowCount }}/18 files</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- CONCRECIÓ DE LES COMPETÈNCIES DE LES ÀREES DEL PSI -->
+                        <table id="learning-table" class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                            <tr>
+                                <td colspan="2" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                    CONCRECIÓ DE LES COMPETÈNCIES DE LES ÀREES DEL PSI
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
+                                    <div class="flex items-center">
+                                        <span class="font-bold mr-1">Objectiu d'aprenentatge</span>
+                                        <span class="text-sm text-gray-500">(7)</span>
+                                    </div>
+                                    <div class="text-sm mb-2">Què volem que aprengui l'alumnat i per a què?</div>
+                                    <div class="text-sm mb-2">CAPACITAT + SABER + FINALITAT</div>
+                                </td>
+                                <td class="p-3 border border-gray-800 w-1/2 bg-blue-100">
+                                    <div class="flex items-center">
+                                        <span class="font-bold mr-1">Criteri d'avaluació</span>
+                                        <span class="text-sm text-gray-500">(8)</span>
+                                    </div>
+                                    <div class="text-sm mb-2">Com sabem que ho ha après?</div>
+                                    <div class="text-sm mb-2">ACCIÓ + SABER + CONTEXT</div>
+                                </td>
+                            </tr>
+
+                            <tbody id="learning-container">
+                            @php
+                                $learningObjectives = old('learning_objectives', $supportPlan->learning_objectives ?? []);
+                                $evaluationCriteria = old('evaluation_criteria', $supportPlan->evaluation_criteria ?? []);
+                                
+                                if (empty($learningObjectives)) {
+                                    $learningObjectives = [''];
+                                }
+                                if (empty($evaluationCriteria)) {
+                                    $evaluationCriteria = [''];
+                                }
+                                
+                                $learningRowCount = max(count($learningObjectives), count($evaluationCriteria));
+                            @endphp
+
+                            @for ($i = 0; $i < $learningRowCount; $i++)
+                                <tr class="learning-row">
+                                    <td class="p-2 border border-gray-800">
+                                        <div class="flex items-center gap-2">
+                                            <textarea name="learning_objectives[]" rows="3" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $learningObjectives[$i] ?? '' }}</textarea>
+                                        </div>
+                                    </td>
+                                    <td class="p-2 border border-gray-800">
+                                        <div class="flex items-center gap-2">
+                                            <textarea name="evaluation_criteria[]" rows="3" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $evaluationCriteria[$i] ?? '' }}</textarea>
+                                            <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endfor
+                            </tbody>
+
+                            <tr>
+                                <td colspan="2" class="p-2 border border-gray-800">
+                                    <button type="button" id="add-learning-row" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Afegir més files
+                                    </button>
+                                    <span id="learning-row-counter" class="ml-2 text-sm text-gray-500">{{ $learningRowCount }}/10 files</span>
                                 </td>
                             </tr>
                         </table>
@@ -747,15 +900,266 @@
                             @include('components.timetable-editor')
                         </div>
 
-                        <!--OBJECTIUS I CRITERIS D'AVALUACIÓ TRANSVERSALS-->
-                        <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;">
+                        <!-- REUNIONS DE SEGUIMENT -->
+                        <div class="space-y-8 mt-8">
+                            <!-- REUNIONS DE SEGUIMENT I ACORDS AMB L'ALUMNE/A -->
+                            <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;" id="reunions-familia-table">
+                                <tr>
+                                    <td colspan="4" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                        REUNIONS DE SEGUIMENT I ACORDS AMB L'ALUMNE/A, EL PARE, LA MARE O EL TUTOR O TUTORA LEGAL
+                                    </td>
+                                </tr>
+                                <tr class="bg-blue-100">
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 15%;">Data</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 25%;">Agents participants</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Temes tractats</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Acords</td>
+                                </tr>
+                                <tbody id="reunions-familia-container">
+                                    @if(isset($supportPlan->reunion_familia) && is_array($supportPlan->reunion_familia))
+                                        @foreach($supportPlan->reunion_familia as $index => $reunio)
+                                            <tr class="reunion-familia-row">
+                                                <td class="p-2 border border-gray-800">
+                                                    <input type="date" name="reunion_familia_data[]" value="{{ $reunio['data'] ?? '' }}" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <textarea name="reunion_familia_agents[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $reunio['agents'] ?? '' }}</textarea>
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <textarea name="reunion_familia_temes[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $reunio['temes'] ?? '' }}</textarea>
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <div class="flex items-start space-x-2">
+                                                        <textarea name="reunion_familia_acords[]" rows="2" class="flex-grow px-2 py-1 border border-gray-300 rounded-md">{{ $reunio['acords'] ?? '' }}</textarea>
+                                                        <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0 mt-1">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="reunion-familia-row">
+                                            <td class="p-2 border border-gray-800">
+                                                <input type="date" name="reunion_familia_data[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <textarea name="reunion_familia_agents[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <textarea name="reunion_familia_temes[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <div class="flex items-start space-x-2">
+                                                    <textarea name="reunion_familia_acords[]" rows="2" class="flex-grow px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                                    <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0 mt-1">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <tr>
+                                    <td colspan="4" class="p-2 border border-gray-800">
+                                        <button type="button" id="add-reunio-familia" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Afegir més files
+                                        </button>
+                                        <span id="reunions-familia-counter" class="ml-2 text-sm text-gray-500">1/10 files</span>
+                                    </td>
+                                </tr>
+                            </table>
 
-                    <div class="flex justify-end mt-4 space-x-3">
-                        <a href="{{ route('support-plans.show', $supportPlan->id) }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition">
-                            {{ __('Cancelar') }}
-                        </a>
+                            <!-- REUNIONS DE SEGUIMENT AMB ELS PROFESSIONALS -->
+                            <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;" id="reunions-professionals-table">
+                                <tr>
+                                    <td colspan="4" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                        REUNIONS DE SEGUIMENT AMB ELS PROFESSIONALS
+                                    </td>
+                                </tr>
+                                <tr class="bg-blue-100">
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 15%;">Data</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 25%;">Agents participants</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Temes tractats</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Acords</td>
+                                </tr>
+                                <tbody id="reunions-professionals-container">
+                                    @if(isset($supportPlan->reunion_professionals) && is_array($supportPlan->reunion_professionals))
+                                        @foreach($supportPlan->reunion_professionals as $index => $reunio)
+                                            <tr class="reunion-professionals-row">
+                                                <td class="p-2 border border-gray-800">
+                                                    <input type="date" name="reunion_professionals_data[]" value="{{ $reunio['data'] ?? '' }}" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <textarea name="reunion_professionals_agents[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $reunio['agents'] ?? '' }}</textarea>
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <textarea name="reunion_professionals_temes[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $reunio['temes'] ?? '' }}</textarea>
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <div class="flex items-start space-x-2">
+                                                        <textarea name="reunion_professionals_acords[]" rows="2" class="flex-grow px-2 py-1 border border-gray-300 rounded-md">{{ $reunio['acords'] ?? '' }}</textarea>
+                                                        <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0 mt-1">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="reunion-professionals-row">
+                                            <td class="p-2 border border-gray-800">
+                                                <input type="date" name="reunion_professionals_data[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <textarea name="reunion_professionals_agents[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <textarea name="reunion_professionals_temes[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <div class="flex items-start space-x-2">
+                                                    <textarea name="reunion_professionals_acords[]" rows="2" class="flex-grow px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                                    <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0 mt-1">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <tr>
+                                    <td colspan="4" class="p-2 border border-gray-800">
+                                        <button type="button" id="add-reunio-professionals" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Afegir més files
+                                        </button>
+                                        <span id="reunions-professionals-counter" class="ml-2 text-sm text-gray-500">1/10 files</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- ACORDS SOBRE LA CONTINUÏTAT -->
+                            <table class="w-full border-collapse border border-gray-800 mb-8" style="table-layout: fixed;" id="acords-table">
+                                <tr>
+                                    <td colspan="4" class="p-3 font-bold text-white text-xl" style="background-color: #6ab0e6; border: 1px solid #000;">
+                                        ACORDS SOBRE LA CONTINUÏTAT DEL PLA DE SUPORT INDIVIDUALITZAT
+                                    </td>
+                                </tr>
+                                <tr class="bg-blue-100">
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 15%;">Data</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 25%;">Agents participants</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Acord</td>
+                                    <td class="p-2 font-bold border border-gray-800" style="width: 30%;">Observacions</td>
+                                </tr>
+                                <tbody id="acords-container">
+                                    @if(isset($supportPlan->acords) && is_array($supportPlan->acords))
+                                        @foreach($supportPlan->acords as $index => $acord)
+                                            <tr class="acord-row">
+                                                <td class="p-2 border border-gray-800">
+                                                    <input type="date" name="acords_data[]" value="{{ $acord['data'] ?? '' }}" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <textarea name="acords_agents[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $acord['agents'] ?? '' }}</textarea>
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <div class="space-y-2">
+                                                        @php
+                                                            $tipus = is_array($acord['tipus'] ?? null) ? $acord['tipus'] : [];
+                                                        @endphp
+                                                        <div class="flex items-center">
+                                                            <input type="checkbox" name="acords_tipus_{{ $loop->index }}[]" value="continuitat" {{ in_array('continuitat', $tipus) ? 'checked' : '' }} class="mr-2">
+                                                            <span>Continuïtat</span>
+                                                        </div>
+                                                        <div class="flex items-center">
+                                                            <input type="checkbox" name="acords_tipus_{{ $loop->index }}[]" value="modificacio" {{ in_array('modificacio', $tipus) ? 'checked' : '' }} class="mr-2">
+                                                            <span>Modificació</span>
+                                                        </div>
+                                                        <div class="flex items-center">
+                                                            <input type="checkbox" name="acords_tipus_{{ $loop->index }}[]" value="finalitzacio" {{ in_array('finalitzacio', $tipus) ? 'checked' : '' }} class="mr-2">
+                                                            <span>Finalització</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="p-2 border border-gray-800">
+                                                    <div class="flex items-start space-x-2">
+                                                        <textarea name="acords_observacions[]" rows="2" class="flex-grow px-2 py-1 border border-gray-300 rounded-md">{{ $acord['observacions'] ?? '' }}</textarea>
+                                                        <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0 mt-1">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="acord-row">
+                                            <td class="p-2 border border-gray-800">
+                                                <input type="date" name="acords_data[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <textarea name="acords_agents[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center">
+                                                        <input type="checkbox" name="acords_tipus_0[]" value="continuitat" class="mr-2">
+                                                        <span>Continuïtat</span>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <input type="checkbox" name="acords_tipus_0[]" value="modificacio" class="mr-2">
+                                                        <span>Modificació</span>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <input type="checkbox" name="acords_tipus_0[]" value="finalitzacio" class="mr-2">
+                                                        <span>Finalització</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="p-2 border border-gray-800">
+                                                <div class="flex items-start space-x-2">
+                                                    <textarea name="acords_observacions[]" rows="2" class="flex-grow px-2 py-1 border border-gray-300 rounded-md"></textarea>
+                                                    <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0 mt-1">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <tr>
+                                    <td colspan="4" class="p-2 border border-gray-800">
+                                        <button type="button" id="add-acord" class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-300 rounded-md font-medium text-xs text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Afegir més files
+                                        </button>
+                                        <span id="acords-counter" class="ml-2 text-sm text-gray-500">1/10 files</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="flex justify-end mt-4">
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
-                            {{ __('Actualizar Plan') }}
+                                {{ __('Guardar Cambios') }}
                         </button>
                         </div>
                     </form>
@@ -788,68 +1192,137 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Handle custom checkboxes
-            const customCheckboxes = document.querySelectorAll('.relative input[type="checkbox"]');
+            function setupTable(tableId, rowClass, containerId, addButtonId, counterSpanId, maxRows) {
+                const table = document.getElementById(tableId);
+                if (!table) return null;
 
-            // Initialize checkboxes state
-            customCheckboxes.forEach(function(checkbox) {
-                const checkIndicator = checkbox.nextElementSibling.querySelector('.check-indicator');
-                if (checkbox.checked) {
-                    checkIndicator.classList.remove('hidden');
-                } else {
-                    checkIndicator.classList.add('hidden');
+                const container = document.getElementById(containerId);
+                const addButton = document.getElementById(addButtonId);
+                const counterSpan = document.getElementById(counterSpanId);
+                let rowCount = document.querySelectorAll('.' + rowClass).length;
+
+                // Función para actualizar el contador
+                function updateRowCount() {
+                    if (counterSpan) {
+                        counterSpan.textContent = rowCount + '/' + maxRows + ' files';
+                    }
+                    if (addButton) {
+                        addButton.style.display = rowCount >= maxRows ? 'none' : 'inline-flex';
+                    }
                 }
-            });
 
-            // Add event listeners to each checkbox
-            customCheckboxes.forEach(function(checkbox) {
-                checkbox.addEventListener('change', function() {
-                    const checkIndicator = this.nextElementSibling.querySelector('.check-indicator');
-                    if (this.checked) {
-                        checkIndicator.classList.remove('hidden');
-                    } else {
-                        checkIndicator.classList.add('hidden');
+                // Manejar eliminación de filas
+                table.addEventListener('click', function(e) {
+                    const deleteButton = e.target.closest('.delete-row');
+                    if (deleteButton && rowCount > 1) {
+                        const row = deleteButton.closest('tr');
+                        row.remove();
+                        rowCount--;
+                        updateRowCount();
                     }
                 });
-            });
 
-            // Àrees, bloc de sabers i sabers
-            const addSabersButton = document.getElementById('add-sabers-row');
-            const sabersContainer = document.getElementById('sabers-container');
-            const sabersRowCounter = document.getElementById('sabers-row-counter');
-            let sabersRowCount = {{ $sabersRowCount ?? 2 }}; // Initial row count from PHP
-            const maxSabersRows = 18; // Maximum number of rows allowed
-
-            if (addSabersButton) {
-                addSabersButton.addEventListener('click', function() {
-                    if (sabersRowCount < maxSabersRows) {
-                        const newRow = document.createElement('tr');
-
-                        newRow.innerHTML = `
-                            <td class="p-2 border border-gray-800">
-                                <input type="text" name="area_materia[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
-                            </td>
-                            <td class="p-2 border border-gray-800">
-                                <input type="text" name="bloc_sabers[]" class="w-full px-2 py-1 border border-gray-300 rounded-md">
-                            </td>
-                            <td class="p-2 border border-gray-800">
-                                <textarea name="saber[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md"></textarea>
-                            </td>
-                        `;
-
-                        sabersContainer.insertAdjacentElement('beforebegin', newRow);
-                        sabersRowCount++;
-
-                        // Update the counter
-                        sabersRowCounter.textContent = `${sabersRowCount}/${maxSabersRows} files`;
-
-                        // Disable button when max rows reached
-                        if (sabersRowCount >= maxSabersRows) {
-                            addSabersButton.disabled = true;
-                            addSabersButton.classList.add('opacity-50', 'cursor-not-allowed');
+                // Manejar adición de filas
+                if (addButton) {
+                    addButton.addEventListener('click', function() {
+                        if (rowCount < maxRows) {
+                            const lastRow = container.querySelector('.' + rowClass + ':last-child');
+                            if (lastRow) {
+                                const newRow = lastRow.cloneNode(true);
+                                // Limpiar valores de los inputs
+                                newRow.querySelectorAll('input, textarea').forEach(input => {
+                                    input.value = '';
+                                });
+                                
+                                // Si es la tabla de learning, actualizar el número
+                                if (tableId === 'learning-table') {
+                                    const spans = newRow.querySelectorAll('.font-bold');
+                                    spans.forEach(span => {
+                                        span.textContent = (rowCount + 1) + '.';
+                                    });
+                                }
+                                
+                                container.appendChild(newRow);
+                                rowCount++;
+                                updateRowCount();
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
+                // Inicializar contador y botones de eliminar
+                updateRowCount();
+
+                return {
+                    updateRowCount: updateRowCount
+                };
+            }
+
+            // Configurar tabla de competencias transversales
+            const transversal = setupTable(
+                'transversal-table',
+                'transversal-row',
+                'transversal-container',
+                'add-transversal-row',
+                'transversal-row-counter',
+                10
+            );
+
+            // Configurar tabla de sabers
+            const sabers = setupTable(
+                'sabers-table',
+                'saber-row',
+                'sabers-container',
+                'add-sabers-row',
+                'sabers-row-counter',
+                18
+            );
+
+            // Configurar tabla de competencias de áreas
+            const learning = setupTable(
+                'learning-table',
+                'learning-row',
+                'learning-container',
+                'add-learning-row',
+                'learning-row-counter',
+                10
+            );
+
+            // Configurar tabla de reuniones con familia
+            const reunionsFamily = setupTable(
+                'reunions-familia-table',
+                'reunion-familia-row',
+                'reunions-familia-container',
+                'add-reunion-familia-row',
+                'reunions-familia-counter',
+                10
+            );
+
+            // Configurar tabla de reuniones con profesionales
+            const reunionsProfessionals = setupTable(
+                'reunions-professionals-table',
+                'reunion-professionals-row',
+                'reunions-professionals-container',
+                'add-reunion-professionals-row',
+                'reunions-professionals-counter',
+                10
+            );
+
+            // Configurar tabla de acuerdos
+            const acords = setupTable(
+                'acords-table',
+                'acord-row',
+                'acords-container',
+                'add-acord-row',
+                'acords-counter',
+                10
+            );
+        });
+
+        // Función para eliminar filas
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.delete-row')) {
+                e.target.closest('tr').remove();
             }
         });
     </script>
