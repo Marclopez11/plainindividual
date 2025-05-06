@@ -259,10 +259,12 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <span>Decisió de la comissió d'atenció educativa inclusiva (CAEI) a proposta de</span>
-                                            <span class="mx-1 font-semibold">{{ $supportPlan->commission_proponent ?? '' }}</span>
-                                            <span>motivada per</span>
-                                            <span class="ml-1 font-semibold">{{ $supportPlan->commission_motivation ?? '' }}</span>
+                                            <div class="flex items-center flex-wrap">
+                                                <span>Decisió de la comissió d'atenció educativa inclusiva (CAEI) a proposta de</span>
+                                                <span class="mx-1 px-2 py-1 border border-gray-300 rounded-md bg-gray-50">{{ $supportPlan->commission_proponent ?? '' }}</span>
+                                                <span class="mx-1">motivada per</span>
+                                                <span class="mx-1 px-2 py-1 border border-gray-300 rounded-md bg-gray-50">{{ $supportPlan->commission_motivation ?? '' }}</span>
+                                            </div>
                                         </div>
                                         <div class="flex items-start">
                                             <div class="relative flex items-center mt-1 mr-2">

@@ -214,34 +214,22 @@
                                     <div class="mb-2">
                                         <p class="font-bold mb-3">Motivat per:<sup>1</sup></p>
                                         <div class="space-y-2">
-                                            <div class="flex items-start">
-                                                <div class="relative flex items-center mt-1 mr-2">
-                                                    <input type="checkbox" name="justification_reasons[]" value="informe_reconeixement"
-                                                        {{ in_array('informe_reconeixement', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
-                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
-                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
-                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                                        </svg>
+                                            @php
+                                                $justificationReasons = old('justification_reasons', $supportPlan->justification_reasons ?? []);
+                                                if (!is_array($justificationReasons)) {
+                                                    $justificationReasons = [];
+                                                }
+                                            @endphp
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="justification_reasons[]" value="informe_reconeixement" class="mr-2"
+                                                    {{ in_array('informe_reconeixement', $justificationReasons) ? 'checked' : '' }}>
+                                                <span>Informe de reconeixement de necessitat de suport educatiu</span>
                                                     </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="justification_reasons[]" value="avaluacio_psicopedagogica" class="mr-2"
+                                                    {{ in_array('avaluacio_psicopedagogica', $justificationReasons) ? 'checked' : '' }}>
+                                                <span>Avaluació psicopedagògica</span>
                                                 </div>
-                                                <label>Informe de reconeixement de necessitat de suport educatiu</label>
-                                            </div>
-
-                                            <div class="flex items-start">
-                                                <div class="relative flex items-center mt-1 mr-2">
-                                                    <input type="checkbox" name="justification_reasons[]" value="avaluacio_psicopedagogica"
-                                                        {{ in_array('avaluacio_psicopedagogica', old('justification_reasons', $supportPlan->justification_reasons ?? [])) ? 'checked' : '' }}
-                                                        class="absolute w-5 h-5 opacity-0 cursor-pointer">
-                                                    <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
-                                                        <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <label>Avaluació psicopedagògica</label>
-                                            </div>
-
                                             <div class="flex items-start">
                                                 <div class="relative flex items-center mt-1 mr-2">
                                                     <input type="checkbox" name="justification_reasons[]" value="avaluacio_inicial_nouvingut"
@@ -317,8 +305,8 @@
                                                 <label>Altres:</label>
                                                 <input type="text" name="justification_other" class="ml-2 px-2 py-1 border border-gray-300 rounded-md w-4/5"
                                                     value="{{ old('justification_other', $supportPlan->justification_other ?? '') }}">
-                                </div>
                             </div>
+                        </div>
                                 </td>
                             </tr>
                             <tr>
@@ -480,37 +468,35 @@
                                 $blocSabers = old('bloc_sabers', $supportPlan->bloc_sabers ?? []);
                                 $saberItems = old('saber', $supportPlan->saber ?? []);
 
-                                if (empty($areaMateria)) {
-                                    $areaMateria = [''];
-                                }
-                                if (empty($blocSabers)) {
-                                    $blocSabers = [''];
-                                }
-                                if (empty($saberItems)) {
-                                    $saberItems = [''];
-                                }
-
-                                $sabersRowCount = max(count($areaMateria), count($blocSabers), count($saberItems));
+                                if (!is_array($areaMateria)) $areaMateria = [];
+                                if (!is_array($blocSabers)) $blocSabers = [];
+                                if (!is_array($saberItems)) $saberItems = [];
+                                
+                                $maxCount = max(count($areaMateria), count($blocSabers), count($saberItems));
+                                $maxCount = $maxCount > 0 ? $maxCount : 1;
                             @endphp
 
                             <tbody id="sabers-container">
-                            @for ($i = 0; $i < $sabersRowCount; $i++)
-                                <tr class="saber-row">
+                                @for($i = 0; $i < $maxCount; $i++)
+                                    <tr class="saber-row" data-row-index="{{ $i }}">
                                     <td class="p-2 border border-gray-800">
-                                        <input type="text" name="area_materia[]" value="{{ $areaMateria[$i] ?? '' }}" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                            <input type="text" name="area_materia[]" value="{{ $areaMateria[$i] ?? '' }}" 
+                                                   class="w-full px-2 py-1 border border-gray-300 rounded-md">
                                     </td>
                                     <td class="p-2 border border-gray-800">
-                                        <input type="text" name="bloc_sabers[]" value="{{ $blocSabers[$i] ?? '' }}" class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                            <input type="text" name="bloc_sabers[]" value="{{ $blocSabers[$i] ?? '' }}"
+                                                   class="w-full px-2 py-1 border border-gray-300 rounded-md">
                                     </td>
                                     <td class="p-2 border border-gray-800">
-                                        <textarea name="saber[]" rows="2" class="w-full px-2 py-1 border border-gray-300 rounded-md">{{ $saberItems[$i] ?? '' }}</textarea>
-                                    </td>
-                                    <td class="p-2 border border-gray-800 text-center">
-                                        <button type="button" class="delete-row text-red-600 hover:text-red-800">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                            </svg>
-                                        </button>
+                                            <div class="flex items-center gap-2">
+                                                <input type="text" name="saber[]" value="{{ $saberItems[$i] ?? '' }}"
+                                                       class="w-full px-2 py-1 border border-gray-300 rounded-md">
+                                                <button type="button" class="delete-row text-red-600 hover:text-red-800 flex-shrink-0 {{ $maxCount === 1 ? 'hidden' : '' }}">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
                                     </td>
                                 </tr>
                             @endfor
@@ -524,7 +510,7 @@
                                         </svg>
                                         Afegir més files
                                     </button>
-                                    <span id="sabers-row-counter" class="ml-2 text-sm text-gray-500">{{ $sabersRowCount }}/18 files</span>
+                                    <span id="sabers-row-counter" class="ml-2 text-sm text-gray-500">{{ $maxCount }}/18 files</span>
                                 </td>
                             </tr>
                         </table>
@@ -621,32 +607,16 @@
                                             }
                                         @endphp
 
-                                        <div class="flex items-start">
-                                            <div class="relative flex items-center mt-1 mr-2">
-                                                <input type="checkbox" name="professionals[]" value="tutor_responsable"
-                                                    {{ in_array('tutor_responsable', $professionals) ? 'checked' : '' }}
-                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
-                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
-                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" name="professionals[]" value="tutor_responsable" class="mr-2"
+                                                {{ in_array('tutor_responsable', $professionals) ? 'checked' : '' }}>
                                             <span>Tutor/a (responsable de coordinar l'elaboració del PI)</span>
                                         </div>
 
-                                        <div class="flex items-start">
-                                            <div class="relative flex items-center mt-1 mr-2">
-                                                <input type="checkbox" name="professionals[]" value="tutor_aula_acollida"
-                                                    {{ in_array('tutor_aula_acollida', $professionals) ? 'checked' : '' }}
-                                                    class="absolute w-5 h-5 opacity-0 cursor-pointer">
-                                                <div class="w-5 h-5 border border-gray-400 flex items-center justify-center bg-white">
-                                                    <svg class="hidden w-4 h-4 text-blue-600 check-indicator" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <span>Tutor/a aula d'acollida:</span>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" name="professionals[]" value="tutor_aula_acollida" class="mr-2"
+                                                {{ in_array('tutor_aula_acollida', $professionals) ? 'checked' : '' }}>
+                                            <span>Tutor/a aula d'acollida</span>
                                         </div>
 
                                         <div class="flex items-start">
@@ -1192,131 +1162,108 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            function setupTable(tableId, rowClass, containerId, addButtonId, counterSpanId, maxRows) {
-                const table = document.getElementById(tableId);
-                if (!table) return null;
-
-                const container = document.getElementById(containerId);
-                const addButton = document.getElementById(addButtonId);
-                const counterSpan = document.getElementById(counterSpanId);
-                let rowCount = document.querySelectorAll('.' + rowClass).length;
-
-                // Función para actualizar el contador
-                function updateRowCount() {
-                    if (counterSpan) {
-                        counterSpan.textContent = rowCount + '/' + maxRows + ' files';
-                    }
-                    if (addButton) {
-                        addButton.style.display = rowCount >= maxRows ? 'none' : 'inline-flex';
-                    }
+            // Configuración para todas las tablas
+            const tableConfigs = {
+                'sabers-container': { 
+                    rowClass: 'saber-row',
+                    min: 1, 
+                    max: 10, 
+                    counter: 'sabers-counter',
+                    fields: ['area_materia', 'bloc_sabers', 'saber']
+                },
+                'learning-container': { 
+                    rowClass: 'learning-row',
+                    min: 1, 
+                    max: 10, 
+                    counter: 'learning-counter',
+                    fields: ['learning_objectives', 'evaluation_criteria']
+                },
+                'transversal-container': { 
+                    rowClass: 'transversal-row',
+                    min: 1, 
+                    max: 10, 
+                    counter: 'transversal-counter',
+                    fields: ['transversal_objectives', 'transversal_criteria']
                 }
+            };
 
-                // Manejar eliminación de filas
-                table.addEventListener('click', function(e) {
+            function updateDeleteButtons(containerId, config) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                const rows = container.querySelectorAll('.' + config.rowClass);
+                rows.forEach(row => {
+                    const deleteButton = row.querySelector('.delete-row');
+                    if (deleteButton) {
+                        deleteButton.classList.toggle('hidden', rows.length <= config.min);
+                    }
+                });
+            }
+
+            function updateCounter(containerId, config) {
+                const counter = document.getElementById(config.counter);
+                const container = document.getElementById(containerId);
+                if (!counter || !container) return;
+
+                const currentCount = container.querySelectorAll('.' + config.rowClass).length;
+                counter.textContent = `${currentCount}/${config.max} files`;
+
+                // Actualizar visibilidad del botón de agregar
+                const addButton = document.querySelector(`#add-${config.rowClass}`);
+                if (addButton) {
+                    addButton.style.display = currentCount >= config.max ? 'none' : 'inline-flex';
+                }
+            }
+
+            function setupTableHandlers(containerId, config) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                // Manejador para eliminar filas
+                container.addEventListener('click', function(e) {
                     const deleteButton = e.target.closest('.delete-row');
-                    if (deleteButton && rowCount > 1) {
-                        const row = deleteButton.closest('tr');
+                    if (!deleteButton) return;
+
+                    const row = deleteButton.closest('.' + config.rowClass);
+                    const rows = container.querySelectorAll('.' + config.rowClass);
+                    
+                    if (rows.length > config.min) {
                         row.remove();
-                        rowCount--;
-                        updateRowCount();
+                        updateDeleteButtons(containerId, config);
+                        updateCounter(containerId, config);
                     }
                 });
 
-                // Manejar adición de filas
+                // Manejador para agregar filas
+                const addButton = document.querySelector(`#add-${config.rowClass}`);
                 if (addButton) {
                     addButton.addEventListener('click', function() {
-                        if (rowCount < maxRows) {
-                            const lastRow = container.querySelector('.' + rowClass + ':last-child');
-                            if (lastRow) {
-                                const newRow = lastRow.cloneNode(true);
-                                // Limpiar valores de los inputs
-                                newRow.querySelectorAll('input, textarea').forEach(input => {
-                                    input.value = '';
-                                });
-                                
-                                // Si es la tabla de learning, actualizar el número
-                                if (tableId === 'learning-table') {
-                                    const spans = newRow.querySelectorAll('.font-bold');
-                                    spans.forEach(span => {
-                                        span.textContent = (rowCount + 1) + '.';
-                                    });
-                                }
-                                
-                                container.appendChild(newRow);
-                                rowCount++;
-                                updateRowCount();
-                            }
-                        }
+                        const rows = container.querySelectorAll('.' + config.rowClass);
+                        if (rows.length >= config.max) return;
+
+                        const lastRow = rows[rows.length - 1];
+                        const newRow = lastRow.cloneNode(true);
+                        
+                        // Limpiar valores
+                        newRow.querySelectorAll('input, textarea').forEach(input => {
+                            input.value = '';
+                        });
+
+                        container.appendChild(newRow);
+                        updateDeleteButtons(containerId, config);
+                        updateCounter(containerId, config);
                     });
                 }
 
-                // Inicializar contador y botones de eliminar
-                updateRowCount();
-
-                return {
-                    updateRowCount: updateRowCount
-                };
+                // Inicialización
+                updateDeleteButtons(containerId, config);
+                updateCounter(containerId, config);
             }
 
-            // Configurar tabla de competencias transversales
-            const transversal = setupTable(
-                'transversal-table',
-                'transversal-row',
-                'transversal-container',
-                'add-transversal-row',
-                'transversal-row-counter',
-                10
-            );
-
-            // Configurar tabla de sabers
-            const sabers = setupTable(
-                'sabers-table',
-                'saber-row',
-                'sabers-container',
-                'add-sabers-row',
-                'sabers-row-counter',
-                18
-            );
-
-            // Configurar tabla de competencias de áreas
-            const learning = setupTable(
-                'learning-table',
-                'learning-row',
-                'learning-container',
-                'add-learning-row',
-                'learning-row-counter',
-                10
-            );
-
-            // Configurar tabla de reuniones con familia
-            const reunionsFamily = setupTable(
-                'reunions-familia-table',
-                'reunion-familia-row',
-                'reunions-familia-container',
-                'add-reunion-familia-row',
-                'reunions-familia-counter',
-                10
-            );
-
-            // Configurar tabla de reuniones con profesionales
-            const reunionsProfessionals = setupTable(
-                'reunions-professionals-table',
-                'reunion-professionals-row',
-                'reunions-professionals-container',
-                'add-reunion-professionals-row',
-                'reunions-professionals-counter',
-                10
-            );
-
-            // Configurar tabla de acuerdos
-            const acords = setupTable(
-                'acords-table',
-                'acord-row',
-                'acords-container',
-                'add-acord-row',
-                'acords-counter',
-                10
-            );
+            // Inicializar todos los manejadores de tabla
+            Object.entries(tableConfigs).forEach(([containerId, config]) => {
+                setupTableHandlers(containerId, config);
+            });
         });
 
         // Función para eliminar filas
