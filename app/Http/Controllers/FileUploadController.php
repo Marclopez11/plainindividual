@@ -47,7 +47,6 @@ class FileUploadController extends Controller
 
     public function process(Request $request)
     {
-
         // Aumentar el tiempo límite de ejecución a 300 segundos (5 minutos)
         ini_set('max_execution_time', 300);
         set_time_limit(300);
@@ -60,6 +59,9 @@ class FileUploadController extends Controller
         ]);
 
         if (!$request->hasFile('excel_file')) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => 'No se ha subido ningún archivo'], 400);
+            }
             return redirect()->back()->with('error', 'No se ha subido ningún archivo');
         }
 
@@ -67,6 +69,9 @@ class FileUploadController extends Controller
             // Verificar que existe la plantilla Word
             $templatePath = storage_path('app/templates/plantilla_plan_soporte_excel.docx');
             if (!file_exists($templatePath)) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['error' => 'La plantilla Word no se encuentra en el sistema. Por favor, contacte al administrador.'], 404);
+                }
                 return redirect()->back()->with('error', 'La plantilla Word no se encuentra en el sistema. Por favor, contacte al administrador.');
             }
 
@@ -100,6 +105,9 @@ class FileUploadController extends Controller
             $data = $this->extractDataFromExcel($worksheet);
 
             if (empty($data)) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['error' => 'No se encontraron los datos requeridos en el Excel'], 400);
+                }
                 return redirect()->back()->with('error', 'No se encontraron los datos requeridos en el Excel');
             }
 
@@ -107,13 +115,19 @@ class FileUploadController extends Controller
             return $this->generateAndDownloadWordDocument($data);
 
         } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
-            dd($e);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => 'Error al leer el archivo Excel. Asegúrate de que el formato es correcto.'], 400);
+            }
             return redirect()->back()->with('error', 'Error al leer el archivo Excel. Asegúrate de que el formato es correcto.');
         } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
-            dd($e);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => 'Error al procesar la plantilla Word: ' . $e->getMessage()], 500);
+            }
             return redirect()->back()->with('error', 'Error al procesar la plantilla Word: ' . $e->getMessage());
         } catch (\Exception $e) {
-            dd($e);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => 'Error al procesar el archivo: ' . $e->getMessage()], 500);
+            }
             return redirect()->back()->with('error', 'Error al procesar el archivo: ' . $e->getMessage());
         }
     }
@@ -585,7 +599,6 @@ class FileUploadController extends Controller
         // Usar la plantilla existente
         $templateProcessor = new TemplateProcessor($templatePath);
 
-
         // Dividir el proceso de reemplazo en bloques para evitar sobrecarga
         $dataChunks = array_chunk($data, 50, true);
 
@@ -642,20 +655,20 @@ class FileUploadController extends Controller
         $tempFile = tempnam(sys_get_temp_dir(), 'word_');
         $templateProcessor->saveAs($tempFile);
 
-        // Crear una respuesta HTTP con el documento
-        $response = response('', 200, [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
-            'Cache-Control' => 'max-age=0',
-        ]);
-
-        // Leer el contenido del archivo temporal y colocarlo en la respuesta
-        $response->setContent(file_get_contents($tempFile));
+        // Leer el contenido del archivo
+        $fileContent = file_get_contents($tempFile);
 
         // Eliminar el archivo temporal
         unlink($tempFile);
 
-        return $response;
+        // Crear una respuesta HTTP con el documento y los headers adecuados
+        return response($fileContent)
+            ->header('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+            ->header('Content-Length', strlen($fileContent))
+            ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
      private function insertTableData($templateProcessor, $blockName, $tableData)

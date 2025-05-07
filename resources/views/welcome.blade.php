@@ -742,6 +742,8 @@
                     fileProgressBar.style.width = width + '%';
                 }
             }, 30);
+
+            return interval;
         }
 
         // Upload another file button
@@ -760,8 +762,77 @@
 
         // For form submission
         uploadForm.addEventListener('submit', function(e) {
-            // Complete progress bar on actual submission
-            fileProgressBar.style.width = '100%';
+            e.preventDefault(); // Prevent the default form submission
+
+            if (!fileInput.files.length) {
+                showToast('Si us plau, selecciona un fitxer primer!');
+                return;
+            }
+
+            const progressInterval = simulateProgress();
+
+            // Create FormData object
+            const formData = new FormData(this);
+
+            // Send AJAX request
+            fetch('{{ route('upload.file') }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                }
+            })
+            .then(response => {
+                // Complete progress bar
+                clearInterval(progressInterval);
+                fileProgressBar.style.width = '100%';
+
+                if (!response.ok) {
+                    throw new Error('Error en la conversió');
+                }
+
+                // Get filename from Content-Disposition header if available
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'plan_soporte.docx';
+
+                if (contentDisposition) {
+                    const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    const matches = filenameRegex.exec(contentDisposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+
+                return response.blob().then(blob => {
+                    return { blob, filename };
+                });
+            })
+            .then(({ blob, filename }) => {
+                // Create download link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+
+                // Trigger the download
+                a.click();
+
+                // Clean up
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                // Show success status
+                conversionStatus.classList.add('active');
+                showToast('Conversió completada amb èxit!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                clearInterval(progressInterval);
+                fileProgressBar.style.width = '0%';
+                showToast('Error en la conversió. Torna a intentar-ho.');
+            });
         });
     </script>
 </body>
